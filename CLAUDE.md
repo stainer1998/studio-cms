@@ -105,7 +105,24 @@ Monaco debe autocompletar estos nombres.
 
 ## Comandos
 
-Se completan durante el hito H1 con los comandos reales del proyecto (levantar el entorno, migrar, crear el administrador, ejecutar pruebas, compilar el frontend y ejecutar el trabajador RQ).
+Copia `.env.example` a `.env` y completa los valores. Fuera de Docker, los comandos leen `.env` con `uv run --env-file .env`.
+
+```bash
+docker compose up -d db redis                        # PostgreSQL y Redis (también crean la base studio_test)
+uv sync                                              # dependencias de Python
+uv run --env-file .env flask --app app db upgrade    # aplicar migraciones
+uv run --env-file .env flask --app app db migrate -m "mensaje"   # nueva migración tras cambiar modelos
+uv run --env-file .env flask --app app crear-admin   # administrador: imprime secreto TOTP, URI y códigos
+uv run --env-file .env flask --app app regenerar-codigos         # nuevos códigos de recuperación
+uv run --env-file .env flask --app app run --debug   # Studio en http://localhost:5000 (SESSION_COOKIE_SECURE=false)
+uv run --env-file .env rq worker                     # trabajador RQ
+uv run --env-file .env pytest                        # pruebas (usa TEST_DATABASE_URL; la base de desarrollo debe estar migrada)
+uv run ruff check . && uv run ruff format .          # lint y formato
+docker compose up -d --build                         # stack completo con Caddy en https://localhost
+docker compose exec web flask --app app crear-admin  # administrador dentro del stack
+```
+
+El comando para compilar el frontend (esbuild) se agrega en H2, cuando exista `frontend/`.
 
 ## Fuera de alcance en este repositorio por ahora
 

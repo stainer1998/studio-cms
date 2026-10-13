@@ -75,10 +75,10 @@ Los identificadores son los del documento general, para mantener la trazabilidad
 
 Criterios de aceptación:
 
-- [ ] Sin un código TOTP válido no se accede a ninguna pantalla del Studio.
-- [ ] Tras varios intentos fallidos seguidos, el inicio de sesión se bloquea temporalmente y queda registrado.
-- [ ] Existen códigos de recuperación de un solo uso para el doble factor.
-- [ ] Cada acción queda en el registro de auditoría con fecha, sitio, objeto y acción, visible desde el panel.
+- [x] Sin un código TOTP válido no se accede a ninguna pantalla del Studio.
+- [x] Tras varios intentos fallidos seguidos, el inicio de sesión se bloquea temporalmente y queda registrado.
+- [x] Existen códigos de recuperación de un solo uso para el doble factor.
+- [x] Cada acción queda en el registro de auditoría con fecha, sitio, objeto y acción, visible desde el panel. *(Creación, edición y eliminación se registran solas; la exportación se agrega en H9.)*
 
 ### 3.2 Sitios
 
@@ -88,9 +88,9 @@ Criterios de aceptación:
 
 Criterios de aceptación:
 
-- [ ] Un sitio tiene nombre, clave única y dominio previsto (usado en enlaces absolutos y en el sitemap).
-- [ ] Todo lo que se crea queda asociado al sitio activo, y ninguna pantalla muestra datos de otro sitio.
-- [ ] Un sitio archivado no aparece en el selector, pero se puede restaurar.
+- [x] Un sitio tiene nombre, clave única y dominio previsto (usado en enlaces absolutos y en el sitemap).
+- [x] Todo lo que se crea queda asociado al sitio activo, y ninguna pantalla muestra datos de otro sitio.
+- [x] Un sitio archivado no aparece en el selector, pero se puede restaurar.
 
 ### 3.3 Modelos
 
