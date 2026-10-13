@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Studio – Diseños base</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#F5F3EF;color:#1D1F22}
+a{color:#2F6F62}a:hover{color:#23564C}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #F5F3EF; color: #1D1F22; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden;">
+<nav aria-label="Navegación principal" style="width: 240px; height: 900px; box-sizing: border-box; background: #17191D; color: #D9DCE1; display: flex; flex-direction: column; gap: 28px; padding: 24px 16px; flex-shrink: 0;">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px;">
+<div style="width: 32px; height: 32px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px;">S</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 16px; font-weight: 600; color: #FFFFFF;">Studio</div>
+<div style="font-size: 12px; color: #A3A8B0;">CMS · VF Digital</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="sitio" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #A3A8B0; padding: 0 8px;">Sitio activo</label>
+<select id="sitio" style="height: 40px; border-radius: 8px; border: 1px solid #33373E; background: #22252B; color: #FFFFFF; padding: 0 10px; font-family: inherit; font-size: 14px;">
+<option>Panadería Los Aromos</option>
+<option>Clínica Dental Sonríe</option>
+<option>Taller Mecánico Ruta 5</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-for list="{{nav}}" as="grp" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-if value="{{grp.hasTitle}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; align-items: center; gap: 8px; padding: 14px 12px 6px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #8A9099;"><span>{{grp.title}}</span><span aria-hidden="true" style="flex-grow: 1; height: 1px; background: #2B2F35;"></span></div>
+</sc-if>
+<sc-for list="{{grp.items}}" as="item" hint-placeholder-count="3">
+<sc-if value="{{item.active}}" hint-placeholder-val="{{false}}">
+<a href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 500;">{{item.label}}</a>
+</sc-if>
+<sc-if value="{{item.inactive}}" hint-placeholder-val="{{true}}">
+<a href="{{item.href}}" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; color: #D9DCE1; text-decoration: none; font-size: 14px;">{{item.label}}</a>
+</sc-if>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 2px; padding: 16px 8px 0; border-top: 1px solid #2B2F35;">
+<div style="font-size: 14px; color: #FFFFFF;">Javier</div>
+<div style="font-size: 12px; color: #A3A8B0;">Administrador técnico</div>
+</div>
+</nav>
+<div style="width: 260px; flex-shrink: 0; background: #FFFFFF; border-right: 1px solid #E2DED6; display: flex; flex-direction: column;">
+<div style="height: 72px; box-sizing: border-box; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2DED6;">
+<h1 style="margin: 0; font-size: 18px; font-weight: 600;">Diseños base</h1>
+<button type="button" aria-label="Nuevo diseño" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #1D1F22; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg></button>
+</div>
+<div style="padding: 12px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid #E2DED6;">
+<sc-for list="{{designs}}" as="d" hint-placeholder-count="3">
+<sc-if value="{{d.active}}" hint-placeholder-val="{{false}}">
+<button type="button" aria-pressed="true" onClick="{{d.pick}}" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 8px; border: none; background: #E4F0EC; text-align: left; font-family: inherit; color: #1F5A4E;">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500;">{{d.file}}</span>
+<span style="font-size: 12px;">{{d.name}} · {{d.uses}}</span>
+</button>
+</sc-if>
+<sc-if value="{{d.inactive}}" hint-placeholder-val="{{true}}">
+<button type="button" aria-pressed="false" onClick="{{d.pick}}" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 8px; border: none; background: transparent; text-align: left; font-family: inherit; color: #1D1F22;">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">{{d.file}}</span>
+<span style="font-size: 12px; color: #5E6167;">{{d.name}} · {{d.uses}}</span>
+</button>
+</sc-if>
+</sc-for>
+</div>
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #E2DED6;">
+<div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5E6167;">Regiones · arrastra al lienzo</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Aviso superior</button>
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Cabecera</button>
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Hero</button>
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Contenido</button>
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Barra lateral</button>
+<button type="button" style="height: 44px; border-radius: 8px; border: 1px dashed #CFCAC0; background: #FAF9F6; color: #1D1F22; font-family: inherit; font-size: 13px;">Pie</button>
+</div>
+</div>
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+<div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5E6167;">Tema del sitio</div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;"><span>Color de marca</span><span style="display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;"><span style="width: 20px; height: 20px; border-radius: 4px; background: #7A4B21;"></span>#7A4B21</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;"><span>Fondo</span><span style="display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;"><span style="width: 20px; height: 20px; border-radius: 4px; background: #FFFDF8; border: 1px solid #E2DED6;"></span>#FFFDF8</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;"><span>Texto</span><span style="display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;"><span style="width: 20px; height: 20px; border-radius: 4px; background: #1D1F22;"></span>#1D1F22</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="t-fuente" style="font-size: 13px;">Tipografía</label>
+<select id="t-fuente" style="height: 36px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 8px; font-family: inherit; font-size: 13px; background: #FFFFFF;"><option>Fraunces + Source Sans</option><option>Sistema</option></select>
+</div>
+</div>
+</div>
+<main style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0;">
+<header style="height: 72px; flex-shrink: 0; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2DED6; background: #FFFFFF; gap: 12px;">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+<div style="font-size: 12px; color: #5E6167;">Diseño base · {{designName}}</div>
+<h2 style="margin: 0; font-size: 18px; font-weight: 600; font-family: 'IBM Plex Mono', monospace;">{{designFile}}</h2>
+</div>
+<div style="display: flex; gap: 10px;">
+<a href="Plantilla-codigo.dc.html" style="height: 40px; box-sizing: border-box; padding: 0 14px; border-radius: 8px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #1D1F22; font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center;">Abrir en código</a>
+<button type="button" style="height: 40px; padding: 0 16px; border-radius: 8px; border: none; background: #2F6F62; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 500;">Guardar</button>
+</div>
+</header>
+<div style="flex-grow: 1; background: #E7E3DC; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; overflow: hidden;">
+<div style="background: #FFFDF8; border-radius: 8px; box-shadow: 0 1px 3px rgba(20,20,19,0.12); padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="3">
+<sc-if value="{{row.single}}" hint-placeholder-val="{{true}}">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px;">
+<sc-for list="{{row.cells}}" as="c" hint-placeholder-count="1">
+<sc-if value="{{c.sel}}" hint-placeholder-val="{{false}}">
+<button type="button" aria-pressed="true" onClick="{{c.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: 6px; border: 2px solid #2F6F62; background: #E4F0EC; font-family: inherit; text-align: left; color: #1F5A4E; min-width: 0;">
+<span style="font-size: 13px; font-weight: 600;">{{c.label}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">{{c.tag}}</span>
+<sc-if value="{{c.isMd}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 52px;"></span></sc-if>
+<sc-if value="{{c.isLg}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 168px;"></span></sc-if>
+</button>
+</sc-if>
+<sc-if value="{{c.unsel}}" hint-placeholder-val="{{true}}">
+<button type="button" aria-pressed="false" onClick="{{c.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: 6px; border: 2px dashed #D6CFC3; background: #F6F1E8; font-family: inherit; text-align: left; color: #1D1F22; min-width: 0;">
+<span style="font-size: 13px; font-weight: 600;">{{c.label}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5E6167;">{{c.tag}}</span>
+<sc-if value="{{c.isMd}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 52px;"></span></sc-if>
+<sc-if value="{{c.isLg}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 168px;"></span></sc-if>
+</button>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{row.split}}" hint-placeholder-val="{{false}}">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 8px;">
+<sc-for list="{{row.cells}}" as="c" hint-placeholder-count="2">
+<sc-if value="{{c.sel}}" hint-placeholder-val="{{false}}">
+<button type="button" aria-pressed="true" onClick="{{c.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: 6px; border: 2px solid #2F6F62; background: #E4F0EC; font-family: inherit; text-align: left; color: #1F5A4E; min-width: 0;">
+<span style="font-size: 13px; font-weight: 600;">{{c.label}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">{{c.tag}}</span>
+<sc-if value="{{c.isMd}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 52px;"></span></sc-if>
+<sc-if value="{{c.isLg}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 168px;"></span></sc-if>
+</button>
+</sc-if>
+<sc-if value="{{c.unsel}}" hint-placeholder-val="{{true}}">
+<button type="button" aria-pressed="false" onClick="{{c.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: 6px; border: 2px dashed #D6CFC3; background: #F6F1E8; font-family: inherit; text-align: left; color: #1D1F22; min-width: 0;">
+<span style="font-size: 13px; font-weight: 600;">{{c.label}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5E6167;">{{c.tag}}</span>
+<sc-if value="{{c.isMd}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 52px;"></span></sc-if>
+<sc-if value="{{c.isLg}}" hint-placeholder-val="{{false}}"><span style="display: block; height: 168px;"></span></sc-if>
+</button>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<section style="background: #1B1E23; border-radius: 8px; overflow: hidden;">
+<div style="display: flex; justify-content: space-between; padding: 8px 14px; background: #15171B; color: #A3A8B0; font-size: 12px;">
+<span>Código generado</span><span>Solo lectura · modo principal: visual</span>
+</div>
+<div style="padding: 10px 14px; display: flex; flex-direction: column; font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 17px; overflow-x: auto;">
+<sc-for list="{{code}}" as="l" hint-placeholder-count="10">
+<sc-if value="{{l.sel}}" hint-placeholder-val="{{false}}"><span style="white-space: pre; color: #8FD3C1; background: #23302D;">{{l.text}}</span></sc-if>
+<sc-if value="{{l.unsel}}" hint-placeholder-val="{{true}}"><span style="white-space: pre; color: #D9DCE1;">{{l.text}}</span></sc-if>
+</sc-for>
+</div>
+</section>
+</div>
+</main>
+<aside style="width: 300px; flex-shrink: 0; background: #FFFFFF; border-left: 1px solid #E2DED6; display: flex; flex-direction: column;">
+<div style="padding: 16px 20px; border-bottom: 1px solid #E2DED6; display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 12px; color: #5E6167;">Región seleccionada</div>
+<h3 style="margin: 0; font-size: 16px; font-weight: 600;">{{reg.label}}</h3>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-bloque" style="font-size: 13px; font-weight: 500;">Nombre del bloque Jinja</label>
+<input id="r-bloque" value="{{reg.block}}" onChange="{{noop}}" style="height: 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-ancho" style="font-size: 13px; font-weight: 500;">Ancho</label>
+<select id="r-ancho" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 10px; font-family: inherit; font-size: 14px; background: #FFFFFF;"><sc-for list="{{reg.widths}}" as="w" hint-placeholder-count="2"><option>{{w}}</option></sc-for></select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-fondo" style="font-size: 13px; font-weight: 500;">Fondo</label>
+<select id="r-fondo" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 10px; font-family: inherit; font-size: 14px; background: #FFFFFF;"><sc-for list="{{reg.backgrounds}}" as="b" hint-placeholder-count="3"><option>{{b}}</option></sc-for></select>
+</div>
+<sc-if value="{{reg.isHeader}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; gap: 10px; min-height: 40px;">
+<input id="r-fija" type="checkbox" checked onChange="{{noop}}" style="width: 18px; height: 18px; accent-color: #2F6F62;">
+<label for="r-fija" style="font-size: 14px;">Fija al desplazarse</label>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #E2DED6; padding-top: 14px;">
+<div style="display: flex; justify-content: space-between; align-items: baseline;">
+<span style="font-size: 13px; font-weight: 500;">Bloques permitidos</span>
+<a href="Bloques.dc.html" style="font-size: 13px;">Ver bloques</a>
+</div>
+<sc-for list="{{reg.allowed}}" as="ab" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 10px; min-height: 32px;">
+<input type="checkbox" checked onChange="{{noop}}" aria-label="{{ab}}" style="width: 16px; height: 16px; accent-color: #2F6F62;">
+<span style="font-size: 14px;">{{ab}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid #E2DED6; padding-top: 10px;">
+<input id="r-cliente" type="checkbox" checked="{{reg.clientEdit}}" onChange="{{noop}}" style="width: 18px; height: 18px; accent-color: #2F6F62;">
+<label for="r-cliente" style="font-size: 14px;">El editor cliente puede agregar bloques aquí</label>
+</div>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { d: 1, r: 'contenido' };
+  }
+  renderVals() {
+    var self = this;
+    var activo = 'Diseños base';
+    var items = [['Panel','Main.dc.html'],['Contenido','Contenido.dc.html'],['Modelos','Modelos.dc.html'],['Plantillas','Plantilla-codigo.dc.html'],['Diseños base','Disenos-base.dc.html'],['Bloques','Bloques.dc.html'],['Rutas','Rutas.dc.html'],['Medios','Medios.dc.html'],['Publicación','Publicacion.dc.html'],['Usuarios','Usuarios.dc.html']];
+    var navFlat = items.map(function (it) { var a = it[0] === activo; return { label: it[0], href: it[1], active: a, inactive: !a }; });
+    var NAVG = [['', ['Panel']], ['Contenido', ['Contenido', 'Medios']], ['Construcción', ['Modelos', 'Plantillas', 'Diseños base', 'Bloques', 'Rutas']], ['Administración', ['Publicación', 'Usuarios']]];
+    var nav = NAVG.map(function (g) { return { title: g[0], hasTitle: !!g[0], items: g[1].map(function (l) { return navFlat.filter(function (x) { return x.label === l; })[0]; }) }; });
+    var noop = function () {};
+
+    var R = {
+      aviso: { label: 'Aviso superior', block: 'aviso', tag: 'div', allowed: ['Texto', 'Botón'], client: true },
+      cabecera: { label: 'Cabecera', block: 'cabecera', tag: 'header', allowed: ['Logo', 'Menú', 'Botón'], client: false },
+      hero: { label: 'Hero', block: 'hero', tag: 'section', allowed: ['Texto', 'Imagen', 'Botón'], client: true },
+      contenido: { label: 'Contenido principal', block: 'contenido', tag: 'main', allowed: ['Bloques básicos', 'Lista de entradas', 'Detalle de entrada', 'Formulario', 'Tarjeta de producto'], client: true },
+      lateral: { label: 'Barra lateral', block: 'barra_lateral', tag: 'aside', allowed: ['Texto', 'Lista de entradas', 'Horario de atención'], client: true },
+      pie: { label: 'Pie de página', block: 'pie', tag: 'footer', allowed: ['Texto', 'Menú', 'Horario de atención'], client: false }
+    };
+    var D = [
+      { file: 'base.html', name: 'Una columna', uses: '6 plantillas', rows: [['cabecera'], ['contenido'], ['pie']], lg: true },
+      { file: 'blog.html', name: 'Con barra lateral', uses: 'sin uso', rows: [['cabecera'], ['contenido', 'lateral'], ['pie']], lg: true },
+      { file: 'landing.html', name: 'Landing', uses: '1 plantilla', rows: [['aviso'], ['cabecera'], ['hero'], ['contenido'], ['pie']], lg: false }
+    ];
+
+    var di = this.state.d;
+    var des = D[di];
+    var keys = [];
+    des.rows.forEach(function (row) { row.forEach(function (k) { keys.push(k); }); });
+    var rk = keys.indexOf(this.state.r) !== -1 ? this.state.r : keys[0];
+
+    var designs = D.map(function (d, i) {
+      var a = i === di;
+      return { file: d.file, name: d.name, uses: d.uses, active: a, inactive: !a, pick: function () { self.setState({ d: i }); } };
+    });
+
+    var rows = des.rows.map(function (row) {
+      var cells = row.map(function (k) {
+        var s = k === rk;
+        var big = k === 'contenido' || k === 'lateral';
+        var isLg = big && des.lg;
+        var isMd = (big && !des.lg) || k === 'hero';
+        return { label: R[k].label, tag: '{% block ' + R[k].block + ' %}', sel: s, unsel: !s, isMd: isMd, isLg: isLg, pick: function () { self.setState({ r: k }); } };
+      });
+      return { single: row.length === 1, split: row.length === 2, cells: cells };
+    });
+
+    var lines = [
+      { t: '{# ' + des.file + ' · generado por el constructor visual #}', k: '' },
+      { t: '<!doctype html>', k: '' },
+      { t: '<html lang="es">', k: '' },
+      { t: '<head>{% include "parciales/head.html" %}</head>', k: '' },
+      { t: '<body>', k: '' }
+    ];
+    des.rows.forEach(function (row) {
+      if (row.length === 2) lines.push({ t: '  <div class="con-lateral">', k: '' });
+      row.forEach(function (k) {
+        var ind = row.length === 2 ? '    ' : '  ';
+        lines.push({ t: ind + '<' + R[k].tag + ' class="' + R[k].block + '">{% block ' + R[k].block + ' %}{% endblock %}</' + R[k].tag + '>', k: k });
+      });
+      if (row.length === 2) lines.push({ t: '  </div>', k: '' });
+    });
+    lines.push({ t: '</body>', k: '' });
+    lines.push({ t: '</html>', k: '' });
+    var code = lines.map(function (l) { var s = l.k === rk; return { text: l.t, sel: s, unsel: !s }; });
+
+    var r = R[rk];
+    var full = rk !== 'contenido' && rk !== 'lateral';
+    var reg = {
+      label: r.label, block: r.block, allowed: r.allowed, clientEdit: r.client, isHeader: rk === 'cabecera',
+      widths: full ? ['Completo', 'Contenido centrado (1200 px)'] : ['Contenido centrado (1200 px)', 'Completo'],
+      backgrounds: rk === 'cabecera' || rk === 'aviso' ? ['Color de marca', 'Claro', 'Oscuro'] : (rk === 'pie' ? ['Oscuro', 'Claro', 'Color de marca'] : ['Claro', 'Color de marca', 'Oscuro'])
+    };
+
+    return { nav: nav, noop: noop, designs: designs, rows: rows, code: code, reg: reg, designName: des.name, designFile: des.file };
+  }
+}
+</script>
+</body>
+</html>

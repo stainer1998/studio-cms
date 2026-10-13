@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Studio – Usuarios</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#F5F3EF;color:#1D1F22}
+a{color:#2F6F62}a:hover{color:#23564C}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #F5F3EF; color: #1D1F22; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden;">
+<nav aria-label="Navegación principal" style="width: 240px; height: 900px; box-sizing: border-box; background: #17191D; color: #D9DCE1; display: flex; flex-direction: column; gap: 28px; padding: 24px 16px; flex-shrink: 0;">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px;">
+<div style="width: 32px; height: 32px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px;">S</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 16px; font-weight: 600; color: #FFFFFF;">Studio</div>
+<div style="font-size: 12px; color: #A3A8B0;">CMS · VF Digital</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="sitio" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #A3A8B0; padding: 0 8px;">Sitio activo</label>
+<select id="sitio" style="height: 40px; border-radius: 8px; border: 1px solid #33373E; background: #22252B; color: #FFFFFF; padding: 0 10px; font-family: inherit; font-size: 14px;">
+<option>Panadería Los Aromos</option>
+<option>Clínica Dental Sonríe</option>
+<option>Taller Mecánico Ruta 5</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-for list="{{nav}}" as="grp" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-if value="{{grp.hasTitle}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; align-items: center; gap: 8px; padding: 14px 12px 6px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #8A9099;"><span>{{grp.title}}</span><span aria-hidden="true" style="flex-grow: 1; height: 1px; background: #2B2F35;"></span></div>
+</sc-if>
+<sc-for list="{{grp.items}}" as="item" hint-placeholder-count="3">
+<sc-if value="{{item.active}}" hint-placeholder-val="{{false}}">
+<a href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 500;">{{item.label}}</a>
+</sc-if>
+<sc-if value="{{item.inactive}}" hint-placeholder-val="{{true}}">
+<a href="{{item.href}}" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; color: #D9DCE1; text-decoration: none; font-size: 14px;">{{item.label}}</a>
+</sc-if>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 2px; padding: 16px 8px 0; border-top: 1px solid #2B2F35;">
+<div style="font-size: 14px; color: #FFFFFF;">Javier</div>
+<div style="font-size: 12px; color: #A3A8B0;">Administrador técnico</div>
+</div>
+</nav>
+<main style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0;">
+<header style="height: 72px; box-sizing: border-box; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2DED6; background: #FFFFFF;">
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 12px; color: #5E6167;">Todos los sitios</div>
+<h1 style="margin: 0; font-size: 22px; font-weight: 600;">Usuarios</h1>
+</div>
+<button type="button" style="height: 40px; padding: 0 16px; border-radius: 8px; border: none; background: #2F6F62; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 500;">Invitar usuario</button>
+</header>
+<div style="padding: 28px 32px; display: flex; gap: 24px; align-items: flex-start;">
+<section style="flex-grow: 1; min-width: 0; background: #FFFFFF; border: 1px solid #E2DED6; border-radius: 12px; overflow: hidden;">
+<div style="padding: 16px 20px; border-bottom: 1px solid #E2DED6;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Usuarios del Studio</h2>
+</div>
+<table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+<thead>
+<tr>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 20px; border-bottom: 1px solid #E2DED6;">Usuario</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 20px; border-bottom: 1px solid #E2DED6;">Rol</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 20px; border-bottom: 1px solid #E2DED6;">Sitios</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 20px; border-bottom: 1px solid #E2DED6;">Doble factor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-weight: 500;">Javier</span><span style="font-size: 12px; color: #5E6167;">[correo de VF Digital]</span></div></td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Administrador técnico</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Todos</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><span style="display: inline-flex; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; background: #DDEFE8; color: #1F5A4E;">Activo</span></td>
+</tr>
+<tr>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-weight: 500;">[Nombre del editor]</span><span style="font-size: 12px; color: #5E6167;">[correo del cliente]</span></div></td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Editor cliente</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Panadería Los Aromos</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><span style="display: inline-flex; padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #EEEBE5; color: #3F4247;">Opcional</span></td>
+</tr>
+<tr>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-weight: 500;">[Nombre del editor]</span><span style="font-size: 12px; color: #5E6167;">[correo del cliente]</span></div></td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Editor cliente</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;">Clínica Dental Sonríe</td>
+<td style="padding: 12px 20px; border-bottom: 1px solid #EFECE6;"><span style="display: inline-flex; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; background: #DDEFE8; color: #1F5A4E;">Activo</span></td>
+</tr>
+<tr>
+<td style="padding: 12px 20px;"><div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-weight: 500; color: #5E6167;">Invitación pendiente</span><span style="font-size: 12px; color: #5E6167;">[correo del cliente]</span></div></td>
+<td style="padding: 12px 20px;">Editor cliente</td>
+<td style="padding: 12px 20px;">Taller Mecánico Ruta 5</td>
+<td style="padding: 12px 20px;"><button type="button" style="height: 32px; padding: 0 12px; border-radius: 6px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #1D1F22; font-family: inherit; font-size: 13px;">Reenviar</button></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section style="width: 440px; flex-shrink: 0; background: #FFFFFF; border: 1px solid #E2DED6; border-radius: 12px; overflow: hidden;">
+<div style="padding: 16px 20px; border-bottom: 1px solid #E2DED6; display: flex; flex-direction: column; gap: 2px;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Roles y permisos</h2>
+<div style="font-size: 12px; color: #5E6167;">Los editores cliente solo ven su propio sitio</div>
+</div>
+<table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+<thead>
+<tr>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 20px; border-bottom: 1px solid #E2DED6;">Módulo</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 12px; border-bottom: 1px solid #E2DED6;">Admin. técnico</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 10px 12px; border-bottom: 1px solid #E2DED6;">Editor cliente</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{perms}}" as="p" hint-placeholder-count="8">
+<tr>
+<td style="padding: 11px 20px; border-bottom: 1px solid #EFECE6;">{{p.modulo}}</td>
+<td style="padding: 11px 12px; border-bottom: 1px solid #EFECE6; color: #1F5A4E; font-weight: 500;">{{p.admin}}</td>
+<sc-if value="{{p.yes}}" hint-placeholder-val="{{true}}">
+<td style="padding: 11px 12px; border-bottom: 1px solid #EFECE6; color: #1F5A4E; font-weight: 500;">{{p.editor}}</td>
+</sc-if>
+<sc-if value="{{p.partial}}" hint-placeholder-val="{{false}}">
+<td style="padding: 11px 12px; border-bottom: 1px solid #EFECE6; color: #8A4B0F;">{{p.editor}}</td>
+</sc-if>
+<sc-if value="{{p.no}}" hint-placeholder-val="{{false}}">
+<td style="padding: 11px 12px; border-bottom: 1px solid #EFECE6; color: #5E6167;">{{p.editor}}</td>
+</sc-if>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var activo = 'Usuarios';
+    var items = [['Panel','Main.dc.html'],['Contenido','Contenido.dc.html'],['Modelos','Modelos.dc.html'],['Plantillas','Plantilla-codigo.dc.html'],['Diseños base','Disenos-base.dc.html'],['Bloques','Bloques.dc.html'],['Rutas','Rutas.dc.html'],['Medios','Medios.dc.html'],['Publicación','Publicacion.dc.html'],['Usuarios','Usuarios.dc.html']];
+    var navFlat = items.map(function (it) { var a = it[0] === activo; return { label: it[0], href: it[1], active: a, inactive: !a }; });
+    var NAVG = [['', ['Panel']], ['Contenido', ['Contenido', 'Medios']], ['Construcción', ['Modelos', 'Plantillas', 'Diseños base', 'Bloques', 'Rutas']], ['Administración', ['Publicación', 'Usuarios']]];
+    var nav = NAVG.map(function (g) { return { title: g[0], hasTitle: !!g[0], items: g[1].map(function (l) { return navFlat.filter(function (x) { return x.label === l; })[0]; }) }; });
+    var rows = [
+      ['Contenido', 'Completo', 'Completo', 'y'],
+      ['Medios', 'Completo', 'Completo', 'y'],
+      ['Editor visual', 'Completo', 'Solo bloques permitidos', 'p'],
+      ['Plantillas por código', 'Completo', 'Sin acceso', 'n'],
+      ['Modelos', 'Completo', 'Sin acceso', 'n'],
+      ['Rutas', 'Completo', 'Sin acceso', 'n'],
+      ['Publicación', 'Completo', 'Publicar contenido', 'p'],
+      ['Usuarios y sitios', 'Completo', 'Sin acceso', 'n']
+    ];
+    var perms = rows.map(function (r) { return { modulo: r[0], admin: r[1], editor: r[2], yes: r[3] === 'y', partial: r[3] === 'p', no: r[3] === 'n' }; });
+    return { nav: nav, perms: perms };
+  }
+}
+</script>
+</body>
+</html>

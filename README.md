@@ -1,0 +1,44 @@
+# Studio CMS
+
+CMS propio en Flask de VF Digital para construir sitios de clientes. Este repositorio contiene la **etapa 1: Studio de uso personal**, que permite crear un sitio completo y exportarlo como sitio estático en un archivo ZIP.
+
+**Estado:** documentación y prototipo listos; desarrollo por iniciar en el hito H1.
+
+## Documentación
+
+| Archivo | Contenido |
+| --- | --- |
+| [docs/etapa-1.md](docs/etapa-1.md) | Alcance, requerimientos con criterios de aceptación, modelo de datos y plan por hitos de la etapa 1. |
+| [docs/requerimientos.md](docs/requerimientos.md) | Requerimientos y especificación técnica del sistema completo (etapas 1 a 4). |
+| [docs/prototipo/](docs/prototipo/README.md) | Pantallas de referencia de la interfaz. |
+| [CLAUDE.md](CLAUDE.md) | Instrucciones de trabajo para Claude Code. |
+
+## Stack
+
+Python 3.12 · Flask · PostgreSQL 16 · Redis y RQ · Jinja2 + HTMX · Monaco Editor · GrapesJS · Tiptap · Docker Compose y Caddy.
+
+## Plan de la etapa 1
+
+| Hito | Contenido |
+| --- | --- |
+| H1 | Base: proyecto, Docker Compose, acceso con doble factor, sitios y auditoría |
+| H2 | Modelos y contenido |
+| H3 | Medios |
+| H4 | Motor de plantillas y editor de código |
+| H5 | Rutas y vista previa |
+| H6 | Diseños base y estilos del sitio |
+| H7 | Editor visual con GrapesJS |
+| H8 | Constructor de bloques |
+| H9 | Exportación estática y cierre |
+
+## Trabajar con Claude Code
+
+Abre el repositorio en Claude Code y comienza cada hito en modo de planificación:
+
+```text
+Lee CLAUDE.md y docs/etapa-1.md. Vamos a implementar solo el hito H1 (Base).
+Propón un plan con la estructura del proyecto, los modelos y las pruebas,
+y espera mi aprobación antes de escribir código.
+```
+
+Al terminar un hito, revisa sus criterios de aceptación en `docs/etapa-1.md`, confirma los cambios y recién entonces pasa al siguiente.

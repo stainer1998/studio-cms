@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Studio – Rutas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#F5F3EF;color:#1D1F22}
+a{color:#2F6F62}a:hover{color:#23564C}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; background: #F5F3EF; color: #1D1F22; font-family: 'IBM Plex Sans', system-ui, sans-serif; overflow: hidden;">
+<nav aria-label="Navegación principal" style="width: 240px; height: 900px; box-sizing: border-box; background: #17191D; color: #D9DCE1; display: flex; flex-direction: column; gap: 28px; padding: 24px 16px; flex-shrink: 0;">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px;">
+<div style="width: 32px; height: 32px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px;">S</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 16px; font-weight: 600; color: #FFFFFF;">Studio</div>
+<div style="font-size: 12px; color: #A3A8B0;">CMS · VF Digital</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="sitio" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #A3A8B0; padding: 0 8px;">Sitio activo</label>
+<select id="sitio" style="height: 40px; border-radius: 8px; border: 1px solid #33373E; background: #22252B; color: #FFFFFF; padding: 0 10px; font-family: inherit; font-size: 14px;">
+<option>Panadería Los Aromos</option>
+<option>Clínica Dental Sonríe</option>
+<option>Taller Mecánico Ruta 5</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-for list="{{nav}}" as="grp" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<sc-if value="{{grp.hasTitle}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; align-items: center; gap: 8px; padding: 14px 12px 6px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #8A9099;"><span>{{grp.title}}</span><span aria-hidden="true" style="flex-grow: 1; height: 1px; background: #2B2F35;"></span></div>
+</sc-if>
+<sc-for list="{{grp.items}}" as="item" hint-placeholder-count="3">
+<sc-if value="{{item.active}}" hint-placeholder-val="{{false}}">
+<a href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; background: #2F6F62; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 500;">{{item.label}}</a>
+</sc-if>
+<sc-if value="{{item.inactive}}" hint-placeholder-val="{{true}}">
+<a href="{{item.href}}" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 8px; color: #D9DCE1; text-decoration: none; font-size: 14px;">{{item.label}}</a>
+</sc-if>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 2px; padding: 16px 8px 0; border-top: 1px solid #2B2F35;">
+<div style="font-size: 14px; color: #FFFFFF;">Javier</div>
+<div style="font-size: 12px; color: #A3A8B0;">Administrador técnico</div>
+</div>
+</nav>
+<main style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0;">
+<header style="height: 72px; box-sizing: border-box; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2DED6; background: #FFFFFF;">
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<div style="font-size: 12px; color: #5E6167;">Panadería Los Aromos</div>
+<h1 style="margin: 0; font-size: 22px; font-weight: 600;">Rutas</h1>
+</div>
+<button type="button" style="height: 40px; padding: 0 16px; border-radius: 8px; border: none; background: #2F6F62; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 500;">Nueva ruta</button>
+</header>
+<div style="padding: 28px 32px; display: flex; flex-direction: column; gap: 16px;">
+<section style="background: #FFFFFF; border: 1px solid #E2DED6; border-radius: 12px; overflow: hidden;">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+<thead>
+<tr>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 12px 20px; border-bottom: 1px solid #E2DED6;">URL</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 12px 20px; border-bottom: 1px solid #E2DED6;">Tipo</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 12px 20px; border-bottom: 1px solid #E2DED6;">Plantilla</th>
+<th style="text-align: left; font-size: 12px; font-weight: 500; color: #5E6167; padding: 12px 20px; border-bottom: 1px solid #E2DED6;">Páginas generadas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">/</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6;">Página fija</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">paginas/inicio.html</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; color: #5E6167;">1</td>
+</tr>
+<tr>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">/productos</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6;">Lista · <a href="Modelos.dc.html">Producto</a></td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">productos/listado.html</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; color: #5E6167;">1</td>
+</tr>
+<tr style="background: #E4F0EC;">
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #1F5A4E; font-weight: 500;">/productos/&lt;slug&gt;</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; color: #1F5A4E;">Detalle · <a href="Modelos.dc.html">Producto</a></td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #1F5A4E;">productos/detalle.html</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; color: #1F5A4E;">Una por entrada publicada</td>
+</tr>
+<tr>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">/nosotros</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6;">Entrada · <a href="Modelos.dc.html">Página</a></td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">paginas/generica.html</td>
+<td style="padding: 14px 20px; border-bottom: 1px solid #EFECE6; color: #5E6167;">1</td>
+</tr>
+<tr>
+<td style="padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">/contacto</td>
+<td style="padding: 14px 20px;">Página fija + formulario</td>
+<td style="padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">paginas/contacto.html</td>
+<td style="padding: 14px 20px; color: #5E6167;">1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<div style="background: #FFFFFF; border: 1px solid #E2DED6; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+<div style="font-size: 12px; color: #5E6167;">Publicación estática</div>
+<div style="font-size: 14px;">Las rutas con parámetros generan un archivo HTML por cada entrada al publicar. El formulario de /contacto envía los datos a un endpoint del Studio.</div>
+</div>
+</div>
+</main>
+<aside style="width: 360px; flex-shrink: 0; background: #FFFFFF; border-left: 1px solid #E2DED6; display: flex; flex-direction: column;">
+<div style="height: 72px; box-sizing: border-box; padding: 0 24px; display: flex; align-items: center; border-bottom: 1px solid #E2DED6;">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600;">Editar ruta</h2>
+</div>
+<div style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-url" style="font-size: 13px; font-weight: 500;">Patrón de URL</label>
+<input id="r-url" value="/productos/&lt;slug&gt;" style="height: 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+</div>
+<div style="display: flex; gap: 12px;">
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+<label for="r-tipo" style="font-size: 13px; font-weight: 500;">Tipo</label>
+<select id="r-tipo" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 8px; font-family: inherit; font-size: 14px; background: #FFFFFF;"><option>Detalle</option><option>Lista</option><option>Página fija</option></select>
+</div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+<label for="r-modelo" style="font-size: 13px; font-weight: 500;">Modelo</label>
+<select id="r-modelo" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 8px; font-family: inherit; font-size: 14px; background: #FFFFFF;"><option>Producto</option><option>Página</option></select>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-campo" style="font-size: 13px; font-weight: 500;">Buscar entrada por</label>
+<select id="r-campo" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 10px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: #FFFFFF;"><option>slug</option></select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-tpl" style="font-size: 13px; font-weight: 500;">Plantilla</label>
+<select id="r-tpl" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 10px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: #FFFFFF;"><option>productos/detalle.html</option></select>
+</div>
+<div style="border-top: 1px solid #E2DED6; padding-top: 16px; display: flex; flex-direction: column; gap: 14px;">
+<div style="font-size: 12px; color: #5E6167;">SEO</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-titulo" style="font-size: 13px; font-weight: 500;">Título de la página</label>
+<input id="r-titulo" value="[nombre] | Los Aromos" style="height: 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 12px; font-family: inherit; font-size: 14px;">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<label for="r-desc" style="font-size: 13px; font-weight: 500;">Meta descripción</label>
+<select id="r-desc" style="height: 40px; border-radius: 8px; border: 1px solid #CFCAC0; padding: 0 10px; font-family: inherit; font-size: 14px; background: #FFFFFF;"><option>Desde el campo «descripción»</option><option>Texto fijo</option></select>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; min-height: 44px;">
+<input id="r-sitemap" type="checkbox" checked style="width: 18px; height: 18px; accent-color: #2F6F62;">
+<label for="r-sitemap" style="font-size: 14px;">Incluir en sitemap.xml</label>
+</div>
+</div>
+<div style="display: flex; justify-content: flex-end; gap: 12px; padding-top: 4px;">
+<button type="button" style="height: 40px; padding: 0 16px; border-radius: 8px; border: none; background: #2F6F62; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 500;">Guardar ruta</button>
+</div>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var activo = 'Rutas';
+    var items = [['Panel','Main.dc.html'],['Contenido','Contenido.dc.html'],['Modelos','Modelos.dc.html'],['Plantillas','Plantilla-codigo.dc.html'],['Diseños base','Disenos-base.dc.html'],['Bloques','Bloques.dc.html'],['Rutas','Rutas.dc.html'],['Medios','Medios.dc.html'],['Publicación','Publicacion.dc.html'],['Usuarios','Usuarios.dc.html']];
+    var navFlat = items.map(function (it) { var a = it[0] === activo; return { label: it[0], href: it[1], active: a, inactive: !a }; });
+    var NAVG = [['', ['Panel']], ['Contenido', ['Contenido', 'Medios']], ['Construcción', ['Modelos', 'Plantillas', 'Diseños base', 'Bloques', 'Rutas']], ['Administración', ['Publicación', 'Usuarios']]];
+    var nav = NAVG.map(function (g) { return { title: g[0], hasTitle: !!g[0], items: g[1].map(function (l) { return navFlat.filter(function (x) { return x.label === l; })[0]; }) }; });
+    return { nav: nav };
+  }
+}
+</script>
+</body>
+</html>
