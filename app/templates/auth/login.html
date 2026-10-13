@@ -1,0 +1,11 @@
+{% extends "auth/_layout.html" %}
+{% from "_form.html" import field %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block form %}
+<form method="post" novalidate>
+  {{ form.hidden_tag() }}
+  {{ field(form.email, autofocus=true) }}
+  {{ field(form.password) }}
+  <button type="submit" class="btn-primary btn-block">Continuar</button>
+</form>
+{% endblock %}

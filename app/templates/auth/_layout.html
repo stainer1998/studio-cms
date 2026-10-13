@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="auth">
+  <div class="auth-card">
+    <div class="brand brand-dark">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <div><div class="brand-name">Studio</div><div class="brand-sub">CMS · VF Digital</div></div>
+    </div>
+    <h1>{{ self.title() }}</h1>
+    {% include "_flashes.html" %}
+    {% if blocked %}
+    <div class="flash flash-error" role="alert">Demasiados intentos fallidos. Espera unos minutos antes de volver a intentarlo.</div>
+    {% else %}
+    {% block form %}{% endblock %}
+    {% endif %}
+  </div>
+</main>
+{% endblock %}

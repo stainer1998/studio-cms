@@ -1,0 +1,12 @@
+{% extends "auth/_layout.html" %}
+{% from "_form.html" import field %}
+{% block title %}Verificación en dos pasos{% endblock %}
+{% block form %}
+<p class="muted">Escribe el código de 6 dígitos de tu app de autenticación o uno de tus códigos de recuperación.</p>
+<form method="post" novalidate>
+  {{ form.hidden_tag() }}
+  {{ field(form.code, autofocus=true) }}
+  <button type="submit" class="btn-primary btn-block">Verificar</button>
+</form>
+<p><a href="{{ url_for('auth.login') }}">Volver</a></p>
+{% endblock %}
