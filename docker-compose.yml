@@ -14,6 +14,8 @@ services:
   web:
     <<: *app
     command: sh -c "flask --app app db upgrade && exec gunicorn --bind 0.0.0.0:8000 --workers 3 --access-logfile - 'app:create_app()'"
+    # Solo local: lo expone `tailscale serve` dentro de la tailnet (sin Funnel).
+    ports: ["127.0.0.1:8000:8000"]
 
   worker:
     <<: *app
