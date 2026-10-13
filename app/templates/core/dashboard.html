@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Panel{% endblock %}
+{% block content %}
+{% if g.site %}
+<div class="stats">
+  <div class="stat"><div class="stat-label">Sitio activo</div><div class="stat-value">{{ g.site.name }}</div></div>
+  <div class="stat"><div class="stat-label">Clave</div><div class="stat-value mono">{{ g.site.key }}</div></div>
+  <div class="stat"><div class="stat-label">Dominio previsto</div><div class="stat-value mono">{{ g.site.domain }}</div></div>
+</div>
+{% endif %}
+<div class="columns">
+  <section class="card grow">
+    <div class="card-head">
+      <h2>Sitios</h2>
+      <a class="btn" href="{{ url_for('sites.new') }}">Nuevo sitio</a>
+    </div>
+    {% include "sites/_table.html" %}
+  </section>
+  <section class="card side">
+    <div class="card-head"><h2>Actividad reciente</h2><a href="{{ url_for('core.audit') }}">Ver todo</a></div>
+    {% for e in recent %}
+    <div class="activity">
+      <div>{% include "core/_audit_text.html" %}</div>
+      <div class="muted small">{{ e.object_type or 'Acceso' }} · {{ e.created_at | fecha_hora }}</div>
+    </div>
+    {% else %}
+    <p class="empty">Sin actividad todavía.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

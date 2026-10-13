@@ -1,0 +1,18 @@
+{% set actions = {'crear': 'Creación', 'editar': 'Edición', 'eliminar': 'Eliminación', 'iniciar_sesion': 'Inicio de sesión', 'codigo_de_recuperacion': 'Inicio con código de recuperación', 'cerrar_sesion': 'Cierre de sesión', 'login_fallido': 'Contraseña incorrecta', 'verificacion_fallida': 'Código incorrecto', 'login_bloqueado': 'Bloqueo por intentos'} %}
+{% for e in page.items %}
+<tr>
+  <td class="muted nowrap">{{ e.created_at | fecha_hora }}</td>
+  <td>{{ e.site.name if e.site else '—' }}</td>
+  <td>{% if e.object_type %}{{ e.object_type }} «{{ e.object_label }}»{% else %}—{% endif %}</td>
+  <td>{{ actions.get(e.action, e.action) }}</td>
+  <td class="muted">{{ e.user.email if e.user else '—' }}</td>
+</tr>
+{% endfor %}
+{% if page.has_next %}
+<tr id="mas">
+  <td colspan="5">
+    <button type="button" class="btn" hx-get="{{ url_for('core.audit', page=page.next_num) }}"
+            hx-target="#mas" hx-swap="outerHTML">Cargar más</button>
+  </td>
+</tr>
+{% endif %}

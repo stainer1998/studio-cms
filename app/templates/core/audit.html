@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Auditoría{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="card-head">
+    <h2>Registro de acciones</h2>
+    <span class="muted small">Del sitio activo y los accesos al Studio</span>
+  </div>
+  <table>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Sitio</th><th scope="col">Objeto</th><th scope="col">Acción</th><th scope="col">Usuario</th></tr></thead>
+    <tbody>
+    {% include "core/_audit_rows.html" %}
+    </tbody>
+  </table>
+  {% if not page.items %}<p class="empty">Sin registros.</p>{% endif %}
+</section>
+{% endblock %}

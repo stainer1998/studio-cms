@@ -1,0 +1,11 @@
+{%- set verbs = {
+  'crear': 'creó', 'editar': 'editó', 'eliminar': 'eliminó',
+  'iniciar_sesion': 'inició sesión',
+  'codigo_de_recuperacion': 'inició sesión con un código de recuperación',
+  'cerrar_sesion': 'cerró sesión', 'login_fallido': 'Intento de inicio de sesión fallido',
+  'verificacion_fallida': 'Código de verificación incorrecto',
+  'login_bloqueado': 'Inicio de sesión bloqueado por intentos fallidos',
+} -%}
+{%- if e.user and e.action not in ('login_fallido', 'verificacion_fallida', 'login_bloqueado') %}{{ e.user.email }} {% endif -%}
+{{ verbs.get(e.action, e.action) }}
+{%- if e.object_type %} {{ e.object_type | lower }} «{{ e.object_label }}»{% endif %}
