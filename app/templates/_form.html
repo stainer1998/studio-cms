@@ -1,0 +1,12 @@
+{% macro field(f, autofocus=false) %}
+{% set ids = [f.id ~ '-ayuda' if f.description, f.id ~ '-error' if f.errors] | select | join(' ') %}
+{% set attrs = {} %}
+{% if ids %}{% set attrs = dict(attrs, **{'aria-describedby': ids}) %}{% endif %}
+{% if f.errors %}{% set attrs = dict(attrs, **{'aria-invalid': 'true'}) %}{% endif %}
+<div class="field{{ ' has-error' if f.errors }}">
+  {{ f.label() }}
+  {{ f(autofocus=autofocus, **attrs) }}
+  {% if f.description %}<div class="help" id="{{ f.id }}-ayuda">{{ f.description }}</div>{% endif %}
+  {% if f.errors %}<div class="error" id="{{ f.id }}-error">{{ f.errors | join(' ') }}</div>{% endif %}
+</div>
+{% endmacro %}

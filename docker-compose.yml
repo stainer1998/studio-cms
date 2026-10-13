@@ -1,0 +1,54 @@
+x-app: &app
+  build: .
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+psycopg://studio:${POSTGRES_PASSWORD}@db:5432/studio
+    REDIS_URL: redis://redis:6379/0
+    SESSION_COOKIE_SECURE: "true"
+  depends_on:
+    db: { condition: service_healthy }
+    redis: { condition: service_started }
+  restart: unless-stopped
+
+services:
+  web:
+    <<: *app
+    command: sh -c "flask --app app db upgrade && exec gunicorn --bind 0.0.0.0:8000 --workers 3 --access-logfile - 'app:create_app()'"
+
+  worker:
+    <<: *app
+    command: rq worker --url redis://redis:6379/0
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: studio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: studio
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "studio", "-d", "studio"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    ports: ["127.0.0.1:6379:6379"]
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    ports: ["127.0.0.1:80:80", "127.0.0.1:443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on: [web]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:

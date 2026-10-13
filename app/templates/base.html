@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"includeIndicatorStyles": false}'>
+  <title>{% block title %}{% endblock %} · Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='studio.css') }}">
+  <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}" defer></script>
+</head>
+<body>
+{% block body %}
+<div class="layout">
+  <nav class="sidebar" aria-label="Navegación principal">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <div><div class="brand-name">Studio</div><div class="brand-sub">CMS · VF Digital</div></div>
+    </div>
+
+    {% if g.sites %}
+    <form class="site-switch" method="post" action="{{ url_for('sites.switch') }}"
+          hx-post="{{ url_for('sites.switch') }}" hx-trigger="change">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="site_id">Sitio activo</label>
+      <div class="site-switch-row">
+        <select id="site_id" name="site_id">
+          {% for s in g.sites %}
+          <option value="{{ s.id }}" {{ 'selected' if g.site and s.id == g.site.id }}>{{ s.name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn-dark">Cambiar</button>
+      </div>
+    </form>
+    {% endif %}
+
+    {% set nav = [
+      ('', [('Panel', 'core.dashboard')]),
+      ('Administración', [('Sitios', 'sites.index'), ('Auditoría', 'core.audit')]),
+    ] %}
+    <div class="nav">
+      {% for group, items in nav %}
+      {% if group %}<div class="nav-group"><span>{{ group }}</span><span class="rule" aria-hidden="true"></span></div>{% endif %}
+      {% for label, endpoint in items %}
+      {% set active = request.endpoint == endpoint or (endpoint.endswith('.index') and request.blueprint == endpoint.split('.')[0]) %}
+      <a href="{{ url_for(endpoint) }}"{% if active %} aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+      {% endfor %}
+    </div>
+
+    <div class="user">
+      <div class="user-name">{{ current_user.email }}</div>
+      <div class="user-role">Administrador técnico</div>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="link-light">Cerrar sesión</button>
+      </form>
+    </div>
+  </nav>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-site">{{ g.site.name if g.site else 'Sin sitio activo' }}</div>
+        <h1>{% block heading %}{{ self.title() }}{% endblock %}</h1>
+      </div>
+      <div class="actions">{% block actions %}{% endblock %}</div>
+    </header>
+    <div class="content">
+      {% include "_flashes.html" %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}
+</body>
+</html>

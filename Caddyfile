@@ -1,0 +1,5 @@
+# En desarrollo responde en https://localhost con un certificado local de Caddy.
+# En el servidor, reemplaza `localhost` por el nombre interno de la VPN o del túnel.
+localhost {
+	reverse_proxy web:8000
+}
