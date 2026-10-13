@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_form.html" import field %}
+{% block title %}{{ 'Editar sitio' if site else 'Nuevo sitio' }}{% endblock %}
+{% block content %}
+<section class="card card-narrow">
+  <form method="post" novalidate class="stack">
+    {{ form.hidden_tag() }}
+    {{ field(form.name, autofocus=true) }}
+    {{ field(form.key) }}
+    {{ field(form.domain) }}
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">{{ 'Guardar cambios' if site else 'Crear sitio' }}</button>
+      <a class="btn" href="{{ url_for('sites.index') }}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

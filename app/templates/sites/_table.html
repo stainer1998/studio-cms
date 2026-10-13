@@ -1,0 +1,24 @@
+{% if g.sites %}
+<table>
+  <thead><tr><th scope="col">Sitio</th><th scope="col">Clave</th><th scope="col">Dominio</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+  <tbody>
+  {% for s in g.sites %}
+  <tr>
+    <td class="strong">{{ s.name }}{% if g.site and s.id == g.site.id %} <span class="pill pill-ok">Activo</span>{% endif %}</td>
+    <td class="mono">{{ s.key }}</td>
+    <td class="mono">{{ s.domain }}</td>
+    <td class="row-actions">
+      <a class="btn" href="{{ url_for('sites.edit', site_id=s.id) }}">Editar</a>
+      <form method="post" action="{{ url_for('sites.archive', site_id=s.id) }}"
+            hx-post="{{ url_for('sites.archive', site_id=s.id) }}" hx-confirm="¿Archivar «{{ s.name }}»? Dejará de aparecer en el selector, pero podrás restaurarlo.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn">Archivar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">Todavía no hay sitios. <a href="{{ url_for('sites.new') }}">Crea el primero</a>.</p>
+{% endif %}

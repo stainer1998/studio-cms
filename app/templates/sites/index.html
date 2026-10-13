@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Sitios{% endblock %}
+{% block actions %}<a class="btn-primary" href="{{ url_for('sites.new') }}">Nuevo sitio</a>{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="card-head"><h2>Sitios activos</h2></div>
+  {% include "sites/_table.html" %}
+</section>
+
+<section class="card">
+  <div class="card-head"><h2>Archivados</h2></div>
+  {% if archived %}
+  <table>
+    <thead><tr><th scope="col">Sitio</th><th scope="col">Clave</th><th scope="col">Archivado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+    <tbody>
+    {% for s in archived %}
+    <tr>
+      <td class="strong">{{ s.name }}</td>
+      <td class="mono">{{ s.key }}</td>
+      <td class="muted">{{ s.archived_at | fecha_hora }}</td>
+      <td class="row-actions">
+        <form method="post" action="{{ url_for('sites.restore', site_id=s.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn">Restaurar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No hay sitios archivados.</p>
+  {% endif %}
+</section>
+{% endblock %}
