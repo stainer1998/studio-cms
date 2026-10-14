@@ -9,6 +9,8 @@ from app.media.models import Media, MediaUsage
 
 # Las imágenes del texto enriquecido apuntan a /medios/<id>/<variante> (ver el selector).
 RICH_SRC = re.compile(r'<img[^>]+src="/medios/(\d+)/')
+# En plantillas solo se pueden detectar los ids escritos a mano, como media_url(12).
+TEMPLATE_MEDIA = re.compile(r"media_url\(\s*(\d+)")
 
 
 def media_ids(entry):
@@ -22,10 +24,18 @@ def media_ids(entry):
     return ids
 
 
-def sync_usages(entry):
-    """Reemplaza los usos de la entrada. Solo cuenta medios que existen en el sitio activo."""
-    db.session.execute(delete(MediaUsage).where(MediaUsage.entry_id == entry.id))
-    ids = media_ids(entry)
+def replace_usages(ids, owner_column, owner_id):
+    """Reemplaza los usos de una entrada o plantilla. Solo cuenta medios del sitio activo."""
+    db.session.execute(delete(MediaUsage).where(owner_column == owner_id))
     if ids:
         existing = db.session.scalars(select(Media.id).where(Media.id.in_(ids)))
-        db.session.add_all(MediaUsage(media_id=i, entry_id=entry.id) for i in existing)
+        db.session.add_all(MediaUsage(media_id=i, **{owner_column.key: owner_id}) for i in existing)
+
+
+def sync_usages(entry):
+    replace_usages(media_ids(entry), MediaUsage.entry_id, entry.id)
+
+
+def sync_template_usages(template):
+    ids = {int(i) for i in TEMPLATE_MEDIA.findall(template.source)}
+    replace_usages(ids, MediaUsage.template_id, template.id)

@@ -2,7 +2,7 @@
 
 CMS propio en Flask de VF Digital para construir sitios de clientes. Este repositorio contiene la **etapa 1: Studio de uso personal**, que permite crear un sitio completo y exportarlo como sitio estático en un archivo ZIP.
 
-**Estado:** hitos H1 (base), H2 (modelos y contenido) y H3 (medios) terminados; sigue H4 (motor de plantillas). Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
+**Estado:** hitos H1 a H4 terminados (base, contenido, medios y motor de plantillas); sigue la prueba de concepto de GrapesJS con Jinja2 y luego H5 (rutas y vista previa). Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
 
 ## Documentación
 

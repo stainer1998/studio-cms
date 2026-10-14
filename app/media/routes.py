@@ -38,7 +38,7 @@ def used_ids():
 
 
 def usages_of(media):
-    q = select(MediaUsage).where(MediaUsage.media_id == media.id).order_by(MediaUsage.entry_id)
+    q = select(MediaUsage).where(MediaUsage.media_id == media.id).order_by(MediaUsage.id)
     return db.session.scalars(q).unique().all()
 
 

@@ -18,7 +18,7 @@ Si encuentras una contradicción entre estos archivos, o un requerimiento que no
 - Antes de escribir código de un hito, propone un plan (archivos, modelos, migraciones, pruebas) y espera aprobación.
 - Un hito está terminado cuando su entregable verificable funciona y se cumplen los criterios de aceptación de sus requerimientos (RF), con pruebas que los cubren.
 - Al cerrar un hito, marca sus criterios en `docs/etapa-1.md` (`- [x]`) y resume lo hecho y lo pendiente.
-- Antes de H7 (editor visual) se hace una prueba de concepto de GrapesJS con Jinja2: un bloque de lista que genere un `for` válido y se vea igual en el editor y en la vista previa.
+- Al cerrar H4 (y siempre antes de H7) se hace una prueba de concepto de GrapesJS con Jinja2, en la rama `poc/grapesjs-jinja`, que no se mezcla con `main`: un bloque de lista que genere un `for` válido y se vea igual en el editor y en la vista previa.
 - Nunca se hace commit directo en `main`. Cada hito o cambio va en su rama (`hito/h3-medios`, `fix/…`, `docs/…`) y entra por pull request con las pruebas y `ruff check` pasando; ver la sección Ramas del `README.md`.
 - Commits pequeños, en español, con el hito y el RF cuando aplique: `H2: formulario generado desde el modelo (RF-10)`.
 
@@ -123,7 +123,7 @@ docker compose up -d --build                         # stack completo con Caddy 
 docker compose exec web flask --app app crear-admin  # administrador dentro del stack
 ```
 
-Islas JS (Tiptap; luego Monaco y GrapesJS), compiladas con esbuild a `app/static/dist/` (no versionado; el `Dockerfile` las compila solo):
+Islas JS (Tiptap y Monaco; luego GrapesJS), compiladas con esbuild a `app/static/dist/` (no versionado; el `Dockerfile` las compila solo):
 
 ```bash
 cd frontend && npm ci && npm run build             # o `npm run watch` mientras se desarrolla

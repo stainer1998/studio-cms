@@ -1,6 +1,6 @@
 from zoneinfo import ZoneInfo
 
-from flask import Flask, render_template, request, session
+from flask import Flask, g, render_template, request, session
 
 from app.config import Config
 from app.extensions import csrf, db, limiter, login_manager, migrate
@@ -32,6 +32,7 @@ def create_app(config=Config):
     from app.core import audit, site_filter  # noqa: F401
     from app.media import models as media_models  # noqa: F401
     from app.sites.models import Site  # noqa: F401
+    from app.templating import models as templating_models  # noqa: F401
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -45,8 +46,18 @@ def create_app(config=Config):
     from app.core.routes import bp as core_bp
     from app.media.routes import bp as media_bp
     from app.sites.routes import bp as sites_bp
+    from app.templating.routes import bp as templates_bp
 
-    for bp in (auth_bp, auth_cli_bp, core_bp, sites_bp, models_bp, entries_bp, media_bp):
+    for bp in (
+        auth_bp,
+        auth_cli_bp,
+        core_bp,
+        sites_bp,
+        models_bp,
+        entries_bp,
+        media_bp,
+        templates_bp,
+    ):
         app.register_blueprint(bp)
 
     from app.core.active_site import load_active_site
@@ -59,7 +70,8 @@ def create_app(config=Config):
 
     @app.after_request
     def security_headers(response):
-        response.headers["Content-Security-Policy"] = CSP
+        # Algunas pantallas la ajustan (editor de código, vista previa) con g.csp.
+        response.headers["Content-Security-Policy"] = g.get("csp", CSP)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "same-origin"
         return response

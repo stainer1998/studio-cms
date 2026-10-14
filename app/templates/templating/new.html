@@ -1,0 +1,16 @@
+{% extends "templating/layout.html" %}
+{% block title %}Nueva plantilla{% endblock %}
+{% block pane %}
+<section class="card card-narrow">
+  <form method="post" action="{{ url_for('templates.new') }}" class="stack" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="field{{ ' has-error' if error }}">
+      <label for="t-path">Ruta de la plantilla</label>
+      <input id="t-path" name="path" value="{{ path }}" class="mono" placeholder="productos/listado.html" required aria-describedby="t-path-ayuda{{ ' t-path-error' if error }}"{% if error %} aria-invalid="true"{% endif %} autofocus>
+      <div class="help" id="t-path-ayuda">Las carpetas se separan con «/». Ejemplos: <span class="mono">base.html</span>, <span class="mono">parciales/cabecera.html</span>.</div>
+      {% if error %}<div class="error" id="t-path-error">{{ error }}</div>{% endif %}
+    </div>
+    <div class="form-actions"><button type="submit" class="btn-primary">Crear plantilla</button></div>
+  </form>
+</section>
+{% endblock %}

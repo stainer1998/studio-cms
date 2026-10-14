@@ -144,3 +144,25 @@ def upload(client, *files):
 
 def media_id(response):
     return int(response.location.rstrip("/").split("/")[-1])
+
+
+def create_template(client, path, source=""):
+    """Crea una plantilla y guarda su código. Devuelve su id."""
+    r = post(client, "/plantillas/nueva", {"path": path})
+    assert r.status_code == 302, r.get_data(as_text=True)
+    template_id = int(r.location.rstrip("/").split("/")[-1])
+    if source:
+        r = save_template(client, template_id, source)
+        assert r.status_code == 302, r.get_data(as_text=True)
+    return template_id
+
+
+def save_template(client, template_id, source):
+    url = f"/plantillas/{template_id}"
+    return post(client, url, {"source": source})
+
+
+def preview(client, template_id, source, datos="reales"):
+    url = f"/plantillas/{template_id}/vista-previa"
+    r = post(client, url, {"source": source, "datos": datos}, form_url=f"/plantillas/{template_id}")
+    return r.get_data(as_text=True)

@@ -1,0 +1,31 @@
+{% extends "templating/layout.html" %}
+{% block title %}Historial · {{ template.path }}{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('templates.edit', template_id=template.id) }}">Volver al editor</a>{% endblock %}
+{% block pane %}
+<div class="split">
+  <section class="card list-pane">
+    <div class="card-head"><h2>Versiones</h2></div>
+    {% for v in items %}
+    <a class="list-item" href="{{ url_for('templates.versions', template_id=template.id, v=v.id) }}"{% if shown and v.id == shown.id %} aria-current="page"{% endif %}>
+      <span>{{ v.created_at | fecha_hora }}</span>{% if loop.first %}<span class="pill pill-ok">Activa</span>{% endif %}
+    </a>
+    {% endfor %}
+  </section>
+  {% if shown %}
+  <section class="card grow-col">
+    <div class="card-head">
+      <h2>Versión del {{ shown.created_at | fecha_hora }}</h2>
+      {% if shown.id != items[0].id and template.mode == 'code' %}
+      <form method="post" action="{{ url_for('templates.restore', template_id=template.id, version_id=shown.id) }}"
+            hx-post="{{ url_for('templates.restore', template_id=template.id, version_id=shown.id) }}"
+            hx-confirm="¿Restaurar esta versión? Se guardará como una versión nueva.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn-primary">Restaurar esta versión</button>
+      </form>
+      {% endif %}
+    </div>
+    <pre class="code">{{ shown.source or '(vacía)' }}</pre>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}
