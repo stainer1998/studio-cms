@@ -3,13 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/tiptap.js src/monaco.js editor.worker=monaco-editor/editor/editor.worker --bundle --minify --format=iife --target=es2020 --loader:.ttf=file --outdir=../app/static/dist",
+    "build": "esbuild src/tiptap.js src/monaco.js src/grapes-poc.js editor.worker=monaco-editor/editor/editor.worker --bundle --minify --format=iife --target=es2020 --loader:.ttf=file --outdir=../app/static/dist",
     "watch": "npm run build -- --watch"
   },
   "dependencies": {
     "@tiptap/core": "3.32.0",
     "@tiptap/extension-image": "3.32.0",
     "@tiptap/starter-kit": "3.32.0",
+    "grapesjs": "0.23.6",
     "monaco-editor": "0.57.0"
   },
   "devDependencies": {

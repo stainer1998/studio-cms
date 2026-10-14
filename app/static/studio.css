@@ -243,3 +243,8 @@ a.media-preview { height: 120px; }
   .sidebar { width: auto; gap: 16px; }
   .main > .content, .topbar { padding-left: 16px; padding-right: 16px; }
 }
+
+/* Prueba de concepto del editor visual (rama poc/grapesjs-jinja) */
+.vpoc { display: grid; grid-template-columns: 220px minmax(0, 1fr) 280px; gap: 16px; }
+.vpoc-canvas { min-height: 70vh; }
+#v-blocks .gjs-block { width: calc(100% - 16px); min-height: 0; padding: 12px; }

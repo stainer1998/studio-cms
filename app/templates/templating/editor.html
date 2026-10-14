@@ -8,6 +8,7 @@
 {% endblock %}
 {% block actions %}
 <span class="pill">Modo principal: {{ MODES[template.mode] }}</span>
+<a class="btn" href="{{ url_for('poc.editor', template_id=template.id) }}">Editor visual (prueba)</a>
 <a class="btn" href="{{ url_for('templates.versions', template_id=template.id) }}">Historial</a>
 {% if not visual %}<button type="submit" form="t-form" class="btn-primary">Guardar</button>{% endif %}
 {% endblock %}

@@ -46,6 +46,7 @@ def create_app(config=Config):
     from app.core.routes import bp as core_bp
     from app.media.routes import bp as media_bp
     from app.sites.routes import bp as sites_bp
+    from app.templating.poc import bp as poc_bp
     from app.templating.routes import bp as templates_bp
 
     for bp in (
@@ -57,6 +58,7 @@ def create_app(config=Config):
         entries_bp,
         media_bp,
         templates_bp,
+        poc_bp,
     ):
         app.register_blueprint(bp)
 

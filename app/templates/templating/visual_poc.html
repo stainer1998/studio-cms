@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Editor visual (prueba) · {{ template.path }}{% endblock %}
+{% block heading %}<span class="mono">{{ template.path }}</span> <span class="pill pill-draft">Prueba de concepto</span>{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dist/grapes-poc.css') }}">
+<script src="{{ url_for('static', filename='dist/grapes-poc.js') }}" defer
+        data-models='{{ models | tojson }}'
+        data-fragment="{{ url_for('poc.fragment') }}"
+        data-save="{{ url_for('poc.save', template_id=template.id) }}"
+        data-key="visual-poc-{{ template.id }}"
+        data-csrf="{{ csrf_token() }}"></script>
+{% endblock %}
+{% block actions %}
+<div class="inline-form">
+  <label for="v-datos" class="sr-only">Datos de prueba</label>
+  <select id="v-datos"><option value="reales">Datos reales del sitio</option><option value="ejemplo">Datos de ejemplo</option></select>
+  <div role="group" aria-label="Dispositivo" class="inline-form">
+    <button type="button" class="btn" data-device="Escritorio" aria-pressed="true">Escritorio</button>
+    <button type="button" class="btn" data-device="Tableta" aria-pressed="false">Tableta</button>
+    <button type="button" class="btn" data-device="Móvil" aria-pressed="false">Móvil</button>
+  </div>
+  <button type="button" class="btn" id="v-undo">Deshacer</button>
+  <button type="button" class="btn" id="v-redo">Rehacer</button>
+  <a class="btn" href="{{ url_for('templates.edit', template_id=template.id) }}">Ver código</a>
+  <button type="button" class="btn-primary" id="v-save">Guardar</button>
+</div>
+{% endblock %}
+{% block content %}
+<div class="vpoc">
+  <aside class="card"><div class="card-head"><h2>Bloques</h2></div><div id="v-blocks"></div></aside>
+  <div class="card vpoc-canvas"><div id="v-editor"></div></div>
+  <aside class="card"><div class="card-head"><h2>Propiedades</h2></div><div id="v-traits"></div>
+    <p class="small muted pad" id="v-status" role="status" aria-live="polite"></p></aside>
+</div>
+{% endblock %}
