@@ -11,7 +11,12 @@ self.MonacoEnvironment = { getWorker: () => new Worker(script.dataset.worker) };
 
 // Partimos de la definición de Twig: misma sintaxis de etiquetas que Jinja2 y resalta el HTML.
 monaco.languages.register({ id: "jinja", extensions: [".html"] });
-monaco.languages.setLanguageConfiguration("jinja", conf);
+// Sin cierre automático de {% %}, {{ }} y {# #}: al escribir la etiqueta completa a mano
+// los cierres se acumulaban al final de la línea (` %} %} }}`).
+monaco.languages.setLanguageConfiguration("jinja", {
+  ...conf,
+  autoClosingPairs: conf.autoClosingPairs.filter((pair) => !pair.open.startsWith("{")),
+});
 monaco.languages.setMonarchTokensProvider("jinja", language);
 
 const DOCS = {
@@ -81,6 +86,7 @@ function mount(textarea) {
     readOnly,
     readOnlyMessage: { value: "Plantilla en modo visual: el código generado es de solo lectura." },
     automaticLayout: true,
+    fixedOverflowWidgets: true, // sugerencias y ayudas no quedan recortadas por la tarjeta
     minimap: { enabled: false },
     fontSize: 13,
     tabSize: 2,
