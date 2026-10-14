@@ -172,4 +172,19 @@ def test_errores_de_sintaxis_en_espanol():
         syntax_message("expected token 'name', got '{'") == "se esperaba «name» y se encontró «{»."
     )
     assert syntax_message("Encountered unknown tag 'endfro'.") == "etiqueta desconocida «endfro»."
+    assert (
+        syntax_message(
+            "Encountered unknown tag 'endblock'. Jinja was looking for the following tags: "
+            "'endfor' or 'else'. The innermost block that needs to be closed is 'for'."
+        )
+        == "«endblock» no va aquí: antes hay que cerrar el bloque «for» con «endfor» o «else»."
+    )
+    assert (
+        syntax_message(
+            "Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is "
+            "expecting this tag, but currently looking for 'endfor' or 'else'. The innermost block "
+            "that needs to be closed is 'for'."
+        )
+        == "«endblock» no va aquí: antes hay que cerrar el bloque «for» con «endfor» o «else»."
+    )
     assert syntax_message("un mensaje nuevo de Jinja") == "un mensaje nuevo de Jinja"

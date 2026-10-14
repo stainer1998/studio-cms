@@ -79,6 +79,12 @@ SYNTAX_MESSAGES = [
         r"Unexpected end of template\. Jinja was looking for the following tags: (.+?)\. .*",
         r"la plantilla termina sin cerrar un bloque; falta \1.",
     ),
+    (
+        r"Encountered unknown tag '(\w+)'\. (?:Jinja was looking for the following tags: |"
+        r"You probably made a nesting mistake\. Jinja is expecting this tag, but currently "
+        r"looking for )(.+?)\. The innermost block that needs to be closed is '(\w+)'\.",
+        r"«\1» no va aquí: antes hay que cerrar el bloque «\3» con \2.",
+    ),
     (r"Encountered unknown tag '(\w+)'.*", r"etiqueta desconocida «\1»."),
     (r"unexpected end of template, expected '(.+)'\.", r"falta «\1» antes del final."),
     (r"unexpected '(.+)'", r"símbolo inesperado «\1»."),
