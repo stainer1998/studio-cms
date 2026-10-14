@@ -1,0 +1,65 @@
+<section class="card pad stack"
+  {% if media.pending %}hx-get="{{ url_for('media.index', media_id=media.id) }}" hx-trigger="every 2s" hx-target="#detalle"{% endif %}>
+  <h2 class="h-sub">Detalle del archivo</h2>
+  {% if media.is_image %}
+  <img class="media-preview" src="{{ url_for('media.file', media_id=media.id, variant='mediana') }}" alt="{{ media.alt_text }}">
+  {% else %}
+  <a class="media-doc media-preview" href="{{ url_for('media.file', media_id=media.id) }}">Abrir PDF</a>
+  {% endif %}
+  <div>
+    <div class="mono strong">{{ media.filename }}</div>
+    <div class="small muted">
+      Subido el {{ media.created_at | fecha_hora }} · {{ media.size | tamano }}
+      {% if media.width %} · {{ media.width }} × {{ media.height }} px{% endif %}
+    </div>
+  </div>
+
+  <form method="post" action="{{ url_for('media.update', media_id=media.id) }}"
+        hx-post="{{ url_for('media.update', media_id=media.id) }}" hx-target="#detalle" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="field">
+      <label for="m-alt">Texto alternativo</label>
+      <input id="m-alt" name="alt_text" value="{{ media.alt_text }}" maxlength="300" placeholder="Describe la imagen" aria-describedby="m-alt-ayuda">
+      <div class="help" id="m-alt-ayuda">Se usa como atributo <code>alt</code> en el sitio. Describe lo que muestra la imagen.</div>
+    </div>
+    <div class="form-actions">
+      {% if saved %}<span class="small muted" role="status">Guardado.</span>{% endif %}
+      <button type="submit" class="btn-primary">Guardar</button>
+    </div>
+  </form>
+
+  {% if media.is_image %}
+  <div class="detail-block">
+    <h3>Variantes generadas</h3>
+    {% if media.pending %}
+    <p class="small muted" role="status">Generando variantes… El archivo ya se puede usar mientras tanto.</p>
+    {% elif media.failed %}
+    <p class="error">{{ media.variants.error }}</p>
+    {% else %}
+    {% for name, width in VARIANTS.items() %}
+    <div class="variant-row">
+      <span class="mono">{{ name }}</span>
+      <span class="muted">{{ (media.variants[name].width ~ ' px') if media.has_variant(name) else 'No aplica: la imagen mide menos de ' ~ width ~ ' px' }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="detail-block">
+    <h3>Usado en</h3>
+    {% for u in usages %}
+    <a href="{{ url_for('entries.edit', entry_id=u.entry_id) }}">Entrada «{{ u.entry.title }}»</a>
+    {% else %}
+    <p class="small muted">Sin usar.</p>
+    {% endfor %}
+  </div>
+
+  <form method="post" action="{{ url_for('media.delete', media_id=media.id) }}"
+        hx-post="{{ url_for('media.delete', media_id=media.id) }}"
+        hx-confirm="¿Eliminar «{{ media.filename }}» y sus variantes? No se puede deshacer.">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-danger" {{ 'disabled aria-describedby=m-en-uso' if usages }}>Eliminar</button>
+    {% if usages %}<p class="small muted" id="m-en-uso">No se puede eliminar mientras esté en uso.</p>{% endif %}
+  </form>
+</section>

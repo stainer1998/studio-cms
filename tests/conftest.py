@@ -1,7 +1,9 @@
+import io
 import re
 
 import pyotp
 import pytest
+from PIL import Image
 from sqlalchemy import text
 
 from app import create_app
@@ -13,8 +15,9 @@ PASSWORD = "contraseña-de-prueba-larga"
 
 
 @pytest.fixture(scope="session")
-def app():
+def app(tmp_path_factory):
     app = create_app(TestConfig)
+    app.config["MEDIA_ROOT"] = str(tmp_path_factory.mktemp("medios"))
     with app.app_context():
         db.session.execute(text("DROP SCHEMA public CASCADE; CREATE SCHEMA public"))
         db.session.commit()
@@ -125,3 +128,19 @@ def product_type(client):
 def save_entry(client, url, form_url=None, **data):
     data.setdefault("status", "borrador")
     return post(client, url, data, form_url=form_url or url)
+
+
+def image_bytes(width=2000, height=1000, fmt="PNG"):
+    buf = io.BytesIO()
+    Image.new("RGB", (width, height), "#C9A27E").save(buf, fmt)
+    return buf.getvalue()
+
+
+def upload(client, *files):
+    """Sube (nombre, bytes) a Medios. Devuelve la respuesta (redirige a la ficha del último)."""
+    data = {"archivos": [(io.BytesIO(content), name) for name, content in files]}
+    return post(client, "/medios/subir", data, form_url="/medios/")
+
+
+def media_id(response):
+    return int(response.location.rstrip("/").split("/")[-1])
