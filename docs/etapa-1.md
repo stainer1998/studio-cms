@@ -154,10 +154,10 @@ Es el bloque más grande de la etapa. GrapesJS cubre el lienzo, las capas, el in
 
 Criterios de aceptación:
 
-- [ ] Monaco resalta Jinja2 y HTML, y autocompleta las funciones y filtros del CMS (`entradas()`, `url_entrada()`, `media_url()`, `moneda`, `fecha`).
-- [ ] Un error de sintaxis se muestra con su línea y no impide seguir editando; la plantilla con error no se puede guardar como versión activa.
-- [ ] Las plantillas se ejecutan en sandbox: un intento de acceder a atributos internos de Python falla con un mensaje claro.
-- [ ] Una plantilla en modo visual muestra su código generado como solo lectura.
+- [x] Monaco resalta Jinja2 y HTML, y autocompleta las funciones y filtros del CMS (`entradas()`, `url_entrada()`, `media_url()`, `moneda`, `fecha`).
+- [x] Un error de sintaxis se muestra con su línea y no impide seguir editando; la plantilla con error no se puede guardar como versión activa.
+- [x] Las plantillas se ejecutan en sandbox: un intento de acceder a atributos internos de Python falla con un mensaje claro.
+- [x] Una plantilla en modo visual muestra su código generado como solo lectura. *(El paso de código a visual y el código generado llegan con el editor visual en H7.)*
 
 ### 4.2 Editor visual
 
