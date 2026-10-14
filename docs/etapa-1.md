@@ -135,9 +135,9 @@ Criterios de aceptación:
 
 Criterios de aceptación:
 
-- [ ] Un archivo con extensión válida pero contenido distinto es rechazado.
-- [ ] Las variantes se generan en segundo plano y el archivo queda utilizable mientras tanto.
-- [ ] La ficha del archivo lista las entradas y plantillas donde se usa.
+- [x] Un archivo con extensión válida pero contenido distinto es rechazado. *(Se aceptan JPEG, PNG, WebP, GIF y PDF; los SVG se rechazan en la etapa 1 porque pueden incluir scripts.)*
+- [x] Las variantes se generan en segundo plano y el archivo queda utilizable mientras tanto.
+- [x] La ficha del archivo lista las entradas y plantillas donde se usa. *(Entradas desde H3; las plantillas se agregan en H4, cuando existan.)*
 
 ## 4. Requerimientos funcionales: diseño y plantillas
 

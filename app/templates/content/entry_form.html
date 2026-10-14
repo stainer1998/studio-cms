@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ entry.title if entry.id else 'Nueva entrada' }}{% endblock %}
-{% block head %}<script src="{{ url_for('static', filename='dist/tiptap.js') }}" defer></script>{% endblock %}
+{% block head %}
+<script src="{{ url_for('static', filename='media.js') }}" data-picker="{{ url_for('media.picker') }}" defer></script>
+<script src="{{ url_for('static', filename='dist/tiptap.js') }}" defer></script>
+{% endblock %}
 {% block heading %}<span class="muted">{{ ct.name }} ·</span> {{ entry.title if entry.id else 'Nueva entrada' }}{% endblock %}
 {% block content %}
 {% set action = url_for('entries.edit', entry_id=entry.id) if entry.id else url_for('entries.new', type_id=ct.id) %}
@@ -38,7 +41,17 @@
         {% for opt_id, opt_title in relations[key] %}<option value="{{ opt_id }}" {{ 'selected' if opt_id == value }}>{{ opt_title }}</option>{% endfor %}
       </select>
       {% elif t == 'image' %}
-      <div class="image-slot" id="{{ id }}">{{ ('Medio #' ~ value) if value else 'Sin imagen' }} · Se elige desde Medios (hito H3).</div>
+      {% set img = images.get(value) %}
+      <div class="image-field" data-image-field>
+        <input type="hidden" name="{{ key }}" value="{{ value if value is not none else '' }}">
+        <div class="image-slot" data-preview>
+          {% if img %}<img src="{{ url_for('media.file', media_id=img.id, variant='miniatura') }}" alt="{{ img.alt_text }}">{% else %}Sin imagen{% endif %}
+        </div>
+        <div class="image-actions">
+          <button type="button" class="btn" id="{{ id }}" data-pick{{ attrs }}>Elegir imagen</button>
+          <button type="button" class="btn" data-clear{{ ' hidden' if not img }}>Quitar</button>
+        </div>
+      </div>
       {% endif %}
 
       {% if t == 'slug' %}

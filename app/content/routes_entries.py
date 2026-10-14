@@ -8,6 +8,8 @@ from app.content.models import STATUSES, Entry, EntryVersion
 from app.content.routes_types import all_types, get_type
 from app.core.htmx import go
 from app.extensions import db
+from app.media.models import Media
+from app.media.usages import sync_usages
 
 bp = Blueprint("entries", __name__, url_prefix="/contenido")
 
@@ -29,6 +31,15 @@ def relation_options(ct):
             q = select(Entry).where(Entry.content_type_id == prop["x-ref"]).order_by(Entry.id)
             options[key] = [(e.id, e.title) for e in db.session.scalars(q)]
     return options
+
+
+def image_fields(ct, data):
+    """Imágenes elegidas en los campos imagen: {clave: {id: Media}}. Solo del sitio activo."""
+    keys = [k for k, p in ct.fields if p["x-type"] == "image" and k in data]
+    ids = {data[k] for k in keys}
+    query = select(Media).where(Media.id.in_(ids), Media.mime.startswith("image/"))
+    found = {m.id: m for m in db.session.scalars(query)} if ids else {}
+    return {k: {data[k]: found[data[k]]} if data[k] in found else {} for k in keys}
 
 
 @bp.route("/")
@@ -58,7 +69,7 @@ def list_entries(type_id):
 
 def save(ct, entry):
     """Valida y guarda la entrada (y su versión). Devuelve los errores por campo."""
-    data, errors = F.parse_form(ct, request.form, entry.data if entry.id else None)
+    data, errors = F.parse_form(ct, request.form)
     for key, message in F.validate(ct.schema, data).items():
         errors.setdefault(key, message)
 
@@ -75,6 +86,11 @@ def save(ct, entry):
         if key in data and data[key] not in {i for i, _ in options}:
             errors[key] = "Elige una entrada del modelo relacionado."
 
+    images = image_fields(ct, data)
+    for key in images:
+        if data[key] not in images[key]:
+            errors[key] = "Elige una imagen de la biblioteca de Medios."
+
     status = request.form.get("status")
     if errors or status not in STATUSES:
         return errors or {"status": "Elige un estado."}, data
@@ -84,6 +100,7 @@ def save(ct, entry):
         db.session.add(entry)
         db.session.flush()
     db.session.add(EntryVersion(entry_id=entry.id, data=data, status=status))
+    sync_usages(entry)
     db.session.commit()
     return {}, data
 
@@ -96,6 +113,7 @@ def render_form(ct, entry, data, errors=None, status=200):
         data=data,
         errors=errors or {},
         relations=relation_options(ct),
+        images={m.id: m for ms in image_fields(ct, data).values() for m in ms.values()},
         STATUSES=STATUSES,
         TYPES=F.TYPES,
     ), status
@@ -186,6 +204,7 @@ def restore(entry_id, version_id):
 
     entry.data, entry.slug, entry.status = dict(version.data), slug, version.status
     db.session.add(EntryVersion(entry_id=entry.id, data=entry.data, status=entry.status))
+    sync_usages(entry)
     db.session.commit()
     flash("Versión restaurada. Se guardó como una versión nueva.")
     return go(url_for("entries.edit", entry_id=entry.id))

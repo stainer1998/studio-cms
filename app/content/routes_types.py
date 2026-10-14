@@ -221,10 +221,8 @@ def parse_field_form(ct, form, editing=None):
         ):
             errors["ref"] = "Elige el modelo relacionado."
 
-    # ponytail: una imagen no puede ser requerida hasta que exista el selector de Medios (H3).
-    required = f["required"] and ftype != "image"
     prop = F.build_property(ftype, label, f["help"].strip(), minimum, maximum, default, ref)
-    return key, prop, required, slug_source, errors, f
+    return key, prop, f["required"], slug_source, errors, f
 
 
 @bp.route("/<int:type_id>/campos", methods=["POST"])

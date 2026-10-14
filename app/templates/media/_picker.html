@@ -1,0 +1,23 @@
+<div class="picker-body">
+  <div class="field">
+    <label for="p-buscar">Buscar imágenes</label>
+    <input id="p-buscar" name="q" type="search" value="{{ q }}" placeholder="Nombre o texto alternativo"
+           hx-get="{{ url_for('media.picker') }}" hx-trigger="input changed delay:300ms"
+           hx-target="#picker-items" hx-select="#picker-items" hx-swap="outerHTML">
+  </div>
+  <ul id="picker-items" class="media-grid">
+    {% for m in items %}
+    <li>
+      <button type="button" class="media-card" data-pick-id="{{ m.id }}" data-alt="{{ m.alt_text }}"
+              data-src="{{ url_for('media.file', media_id=m.id, variant='mediana') }}"
+              data-thumb="{{ url_for('media.file', media_id=m.id, variant='miniatura') }}">
+        <img src="{{ url_for('media.file', media_id=m.id, variant='miniatura') }}" alt="" loading="lazy">
+        <span class="mono">{{ m.filename }}</span>
+        {% if not m.alt_text %}<span class="small muted">Sin texto alternativo</span>{% endif %}
+      </button>
+    </li>
+    {% else %}
+    <li class="empty">No hay imágenes{{ ' que coincidan' if q }}. <a href="{{ url_for('media.index') }}">Súbelas en Medios</a>.</li>
+    {% endfor %}
+  </ul>
+</div>

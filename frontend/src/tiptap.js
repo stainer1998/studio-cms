@@ -24,12 +24,13 @@ function link(chain, editor) {
   return href ? chain.extendMarkRange("link").setLink({ href }) : chain.extendMarkRange("link").unsetLink();
 }
 
-function image(chain) {
-  // ponytail: imagen por URL; el selector de la biblioteca de Medios llega en H3.
-  const src = window.prompt("Dirección de la imagen");
-  if (!src) return chain;
-  const alt = window.prompt("Texto alternativo (describe la imagen)") || "";
-  return chain.setImage({ src, alt });
+function image(chain, editor) {
+  // Selector de la biblioteca de Medios (app/static/media.js). Inserta la variante mediana;
+  // la exportación reescribe /medios/<id>/… a rutas del sitio.
+  window.studioPickImage().then((media) => {
+    if (media) editor.chain().focus().setImage({ src: media.src, alt: media.alt }).run();
+  });
+  return chain;
 }
 
 function mount(textarea) {

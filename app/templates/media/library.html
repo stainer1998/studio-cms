@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Medios{% endblock %}
+{% block head %}<script src="{{ url_for('static', filename='media.js') }}" data-picker="{{ url_for('media.picker') }}" defer></script>{% endblock %}
+{% block actions %}<label for="m-archivos" class="btn-primary" tabindex="0" role="button" data-file-trigger>Subir archivos</label>{% endblock %}
+{% block content %}
+<div class="split">
+  <div class="grow-col">
+    <section class="card">
+      <form class="filters" method="get" action="{{ url_for('media.index') }}"
+            hx-get="{{ url_for('media.index') }}" hx-target="#medios" hx-push-url="true"
+            hx-trigger="input changed delay:300ms from:#m-buscar, change from:[name=tipo], submit">
+        <fieldset class="segmented">
+          <legend class="sr-only">Filtrar por tipo</legend>
+          {% for value, label in FILTERS.items() %}
+          <label><input type="radio" name="tipo" value="{{ value }}" {{ 'checked' if value == kind }}><span>{{ label }}</span></label>
+          {% endfor %}
+        </fieldset>
+        <div class="field">
+          <label for="m-buscar" class="sr-only">Buscar medios</label>
+          <input id="m-buscar" name="q" type="search" value="{{ q }}" placeholder="Buscar por nombre o texto alternativo">
+        </div>
+        <button type="submit" class="btn">Filtrar</button>
+      </form>
+      <form class="dropzone" method="post" action="{{ url_for('media.upload') }}" enctype="multipart/form-data"
+            hx-post="{{ url_for('media.upload') }}" hx-encoding="multipart/form-data" data-dropzone>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input id="m-archivos" class="sr-only" type="file" name="archivos" multiple
+               accept="image/jpeg,image/png,image/webp,image/gif,application/pdf">
+        <p>Arrastra archivos aquí o <label for="m-archivos" class="link">elígelos desde tu equipo</label>.</p>
+        <p class="small muted">JPEG, PNG, WebP, GIF o PDF, hasta {{ config.MEDIA_MAX_BYTES // 1048576 }} MB cada uno. Las imágenes generan variantes WebP de 320, 800 y 1600 px.</p>
+        <p class="small muted htmx-indicator" role="status">Subiendo…</p>
+        <noscript><button type="submit" class="btn">Subir</button></noscript>
+      </form>
+      <div id="medios" aria-live="polite">{% include "media/_grid.html" %}</div>
+    </section>
+  </div>
+  <aside class="side-col" id="detalle" aria-live="polite">
+    {% if media %}{% include "media/_detail.html" %}{% else %}
+    <section class="card pad"><p class="empty">Elige un archivo para ver su detalle.</p></section>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

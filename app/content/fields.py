@@ -84,7 +84,7 @@ def build_property(
         case "bool":
             prop["type"] = "boolean"
         case "image":
-            prop["type"] = "integer"  # id del medio (H3)
+            prop["type"] = "integer"  # id del medio
         case "slug":
             prop |= {"type": "string", "pattern": SLUG_PATTERN}
         case "relation":
@@ -118,27 +118,24 @@ def moved_field(schema, key, step):
 # --- Formulario de una entrada ---------------------------------------------------------
 
 
-def parse_form(content_type, form, current=None):
+def parse_form(content_type, form):
     """Convierte el formulario en `data` tipado. Devuelve (data, errores por campo)."""
     data, errors = {}, {}
-    current = current or {}
     for key, prop in content_type.fields:
         ftype = prop["x-type"]
         raw = (form.get(key) or "").strip()
         if ftype == "bool":
             data[key] = key in form
-        elif ftype == "image":
-            if key in current:  # el selector llega con la biblioteca de medios (H3)
-                data[key] = current[key]
         elif ftype == "rich":
             html = sanitize_html(raw)
             if re.sub(r"<[^>]+>|&nbsp;|\s", "", html) or "<img" in html:
                 data[key] = html
-        elif ftype in {"number", "relation"}:
+        elif ftype in {"number", "relation", "image"}:
             if raw:
                 try:
                     value = float(raw.replace(",", "."))
-                    data[key] = int(value) if ftype == "relation" or value.is_integer() else value
+                    whole = ftype != "number" or value.is_integer()
+                    data[key] = int(value) if whole else value
                 except ValueError:
                     errors[key] = "Escribe un número."
         elif raw:

@@ -5,6 +5,9 @@ x-app: &app
     DATABASE_URL: postgresql+psycopg://studio:${POSTGRES_PASSWORD}@db:5432/studio
     REDIS_URL: redis://redis:6379/0
     SESSION_COOKIE_SECURE: "true"
+    MEDIA_ROOT: /srv/storage/media
+  volumes:
+    - media:/srv/storage/media
   depends_on:
     db: { condition: service_healthy }
     redis: { condition: service_started }
@@ -53,4 +56,5 @@ services:
 
 volumes:
   pgdata:
+  media:
   caddy_data:

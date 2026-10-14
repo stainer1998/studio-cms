@@ -89,9 +89,7 @@
   <label class="check"><input type="checkbox" name="default" {{ 'checked' if f.default in (true, 'on') }}> Marcado por defecto</label>
   {% endif %}
 
-  {% if f.type == 'image' %}
-  <p class="help">Las imágenes se eligen desde Medios (hito H3). Hasta entonces el campo no puede ser requerido.</p>
-  {% elif f.type != 'bool' %}
+  {% if f.type != 'bool' %}
   <label class="check"><input type="checkbox" name="required" {{ 'checked' if f.required in (true, 'on') }}> Campo requerido</label>
   {% endif %}
 

@@ -1,0 +1,23 @@
+{% if items %}
+<ul class="media-grid">
+  {% for m in items %}
+  <li>
+    <a class="media-card" href="{{ url_for('media.index', media_id=m.id) }}"
+       hx-get="{{ url_for('media.index', media_id=m.id) }}" hx-target="#detalle" hx-push-url="true"
+       {% if selected and selected.id == m.id %}aria-current="true"{% endif %}>
+      {% if m.is_image %}
+      <img src="{{ url_for('media.file', media_id=m.id, variant='miniatura') }}" alt="" loading="lazy">
+      {% else %}
+      <span class="media-doc" aria-hidden="true">PDF</span>
+      {% endif %}
+      <span class="mono">{{ m.filename }}</span>
+      <span class="small muted">{{ 'Imagen' if m.is_image else 'Documento' }} · {{ 'en uso' if m.id in used else 'sin usar' }}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% elif q or kind %}
+<p class="empty">No hay archivos que coincidan con la búsqueda.</p>
+{% else %}
+<p class="empty">Este sitio aún no tiene archivos. Arrástralos a la zona de arriba.</p>
+{% endif %}
