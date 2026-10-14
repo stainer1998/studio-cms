@@ -2,7 +2,7 @@
 
 CMS propio en Flask de VF Digital para construir sitios de clientes. Este repositorio contiene la **etapa 1: Studio de uso personal**, que permite crear un sitio completo y exportarlo como sitio estático en un archivo ZIP.
 
-**Estado:** hito H1 (base) terminado; sigue H2. Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
+**Estado:** hitos H1 (base) y H2 (modelos y contenido) terminados; sigue H3 (medios). Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
 
 ## Documentación
 
@@ -42,3 +42,15 @@ y espera mi aprobación antes de escribir código.
 ```
 
 Al terminar un hito, revisa sus criterios de aceptación en `docs/etapa-1.md`, confirma los cambios y recién entonces pasa al siguiente.
+
+## Ramas
+
+`main` siempre funciona y no recibe commits directos. Cada hito o cambio se trabaja en su propia rama y entra a `main` por pull request:
+
+| Prefijo | Uso | Ejemplo |
+| --- | --- | --- |
+| `hito/` | Un hito del plan | `hito/h3-medios` |
+| `fix/` | Corrección de un error | `fix/slug-duplicado` |
+| `docs/` | Solo documentación | `docs/readme-ramas` |
+
+Antes de abrir el pull request, las pruebas y `ruff check` deben pasar.
