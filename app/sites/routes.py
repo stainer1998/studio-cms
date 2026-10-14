@@ -6,6 +6,7 @@ from sqlalchemy import select
 from wtforms import StringField
 from wtforms.validators import DataRequired, Length, Regexp, ValidationError
 
+from app.core.htmx import go
 from app.core.models import utcnow
 from app.extensions import db
 from app.sites.models import Site
@@ -48,14 +49,6 @@ class SiteForm(FlaskForm):
         field.data = field.data.rstrip("/")
         if not HOSTNAME.match(field.data):
             raise ValidationError("Escribe un dominio válido, sin ruta. Ejemplo: misitio.cl")
-
-
-def _go(endpoint):
-    """Redirige también las peticiones HTMX (que no siguen un 302 como navegación)."""
-    target = url_for(endpoint)
-    if request.headers.get("HX-Request"):
-        return "", 200, {"HX-Redirect": target}
-    return redirect(target)
 
 
 def _get(site_id):
@@ -102,7 +95,7 @@ def archive(site_id):
     site.archived_at = utcnow()
     db.session.commit()
     flash(f"Sitio «{site.name}» archivado. Puedes restaurarlo desde Sitios.")
-    return _go("sites.index")
+    return go(url_for("sites.index"))
 
 
 @bp.route("/<int:site_id>/restaurar", methods=["POST"])
@@ -120,4 +113,4 @@ def switch():
     if not any(s.id == site_id for s in g.sites):
         abort(400)
     session["site_id"] = site_id
-    return _go("core.dashboard")
+    return go(url_for("core.dashboard"))
