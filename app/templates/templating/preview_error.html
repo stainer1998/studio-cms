@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Error en la plantilla</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='studio.css') }}"></head>
+<body class="preview-error">
+  <div class="flash flash-error" role="alert">
+    <strong>No se pudo renderizar la plantilla.</strong><br>{{ error.message }}
+  </div>
+</body>
+</html>

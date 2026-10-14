@@ -49,7 +49,11 @@
   <div class="detail-block">
     <h3>Usado en</h3>
     {% for u in usages %}
+    {% if u.entry_id %}
     <a href="{{ url_for('entries.edit', entry_id=u.entry_id) }}">Entrada «{{ u.entry.title }}»</a>
+    {% else %}
+    <a href="{{ url_for('templates.edit', template_id=u.template_id) }}">Plantilla <span class="mono">{{ u.template.path }}</span></a>
+    {% endif %}
     {% else %}
     <p class="small muted">Sin usar.</p>
     {% endfor %}

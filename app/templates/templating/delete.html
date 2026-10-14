@@ -1,0 +1,15 @@
+{% extends "templating/layout.html" %}
+{% block title %}Eliminar {{ template.path }}{% endblock %}
+{% block pane %}
+<section class="card card-narrow confirm">
+  <p>¿Eliminar la plantilla <span class="mono">{{ template.path }}</span> y todas sus versiones? No se puede deshacer.</p>
+  {% if users %}
+  <div class="flash flash-warning" role="alert">La usan en <code>extends</code> o <code>include</code>: {% for u in users %}<span class="mono">{{ u }}</span>{{ ', ' if not loop.last }}{% endfor %}. Esas plantillas dejarán de funcionar.</div>
+  {% endif %}
+  <form method="post" action="{{ url_for('templates.delete', template_id=template.id) }}" class="form-actions">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-danger">Eliminar plantilla</button>
+    <a class="btn" href="{{ url_for('templates.edit', template_id=template.id) }}">Cancelar</a>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "templating/layout.html" %}
+{% set visual = template.mode == 'visual' %}
+{% block title %}{{ template.path }}{% endblock %}
+{% block heading %}<span class="mono">{{ template.path }}</span>{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dist/monaco.css') }}">
+<script src="{{ url_for('static', filename='dist/monaco.js') }}" data-worker="{{ url_for('static', filename='dist/editor.worker.js') }}" defer></script>
+{% endblock %}
+{% block actions %}
+<span class="pill">Modo principal: {{ MODES[template.mode] }}</span>
+<a class="btn" href="{{ url_for('templates.versions', template_id=template.id) }}">Historial</a>
+{% if not visual %}<button type="submit" form="t-form" class="btn-primary">Guardar</button>{% endif %}
+{% endblock %}
+{% block pane %}
+<div class="tpl-editor">
+  <section class="card tpl-code">
+    {% if visual %}
+    <div class="flash flash-warning tpl-banner">
+      <span>Esta plantilla se edita en el editor visual. Su código generado es de solo lectura.</span>
+      <form method="post" action="{{ url_for('templates.to_code', template_id=template.id) }}"
+            hx-post="{{ url_for('templates.to_code', template_id=template.id) }}"
+            hx-confirm="¿Convertir a código? Desde ahora se editará solo por código y el editor visual no la modificará.">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn">Convertir a código</button>
+      </form>
+    </div>
+    {% endif %}
+    <form id="t-form" method="post" action="{{ url_for('templates.edit', template_id=template.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="t-source" class="sr-only">Código de la plantilla {{ template.path }}</label>
+      <textarea id="t-source" name="source" class="code-area mono" spellcheck="false" rows="24"
+                data-monaco data-path="{{ template.path }}" data-validate="{{ url_for('templates.validate') }}"
+                data-cms='{{ cms | tojson }}'{{ ' readonly' if visual }}
+                aria-describedby="t-status">{{ source }}</textarea>
+    </form>
+    <div class="tpl-status" id="t-status" role="status" aria-live="polite">
+      <span>Jinja2 · Entorno sandbox activo</span>
+      <span id="t-errors">
+        {% if errors %}
+        {% for e in errors %}<span class="error">{{ e.message }}</span>{% endfor %}
+        {% else %}Sin errores{% endif %}
+      </span>
+    </div>
+    {% if errors %}<p class="small error pad">No se guardó: corrige el error para guardar una versión nueva. Lo que escribiste sigue en el editor.</p>{% endif %}
+    <div class="tpl-foot">
+      <form method="post" action="{{ url_for('templates.rename', template_id=template.id) }}" class="inline-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="t-rename" class="small">Ruta</label>
+        <input id="t-rename" name="path" value="{{ template.path }}" class="mono">
+        <button type="submit" class="btn">Renombrar</button>
+      </form>
+      <a class="btn btn-danger" href="{{ url_for('templates.delete', template_id=template.id) }}">Eliminar</a>
+    </div>
+  </section>
+
+  <section class="card tpl-preview">
+    <form id="p-form" method="post" action="{{ url_for('templates.preview', template_id=template.id) }}" target="vista-previa" class="card-head">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="source" id="p-source" value="{{ source }}">
+      <h2>Vista previa</h2>
+      <div class="inline-form">
+        <label for="p-datos" class="sr-only">Datos de prueba</label>
+        <select id="p-datos" name="datos">
+          <option value="reales">Datos reales del sitio</option>
+          <option value="ejemplo">Datos de ejemplo</option>
+        </select>
+        <button type="submit" class="btn">Actualizar</button>
+      </div>
+    </form>
+    <iframe name="vista-previa" title="Vista previa de {{ template.path }}" sandbox="allow-same-origin"></iframe>
+    <p class="small muted pad">Solo se muestran entradas listas para exportar. Los enlaces de <code>url_entrada()</code> se activan cuando existan las rutas (hito H5).</p>
+  </section>
+</div>
+{% endblock %}

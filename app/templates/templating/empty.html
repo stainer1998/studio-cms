@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Plantillas{% endblock %}
+{% block content %}
+<section class="card card-narrow stack">
+  <p>Este sitio aún no tiene plantillas. Las plantillas son vistas Jinja2 que se ejecutan en un entorno aislado (sandbox) y pueden usar <code>entradas()</code>, <code>entrada()</code>, <code>url_entrada()</code>, <code>media_url()</code> y los filtros <code>moneda</code> y <code>fecha</code>.</p>
+  <p><a class="btn-primary" href="{{ url_for('templates.new', ruta='base.html') }}">Crear base.html</a></p>
+</section>
+{% endblock %}

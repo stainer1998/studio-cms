@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="split tpl-layout">
+  <nav class="card list-pane tpl-tree" aria-label="Archivos de plantillas">
+    <div class="card-head"><h2>Archivos</h2><a class="btn btn-icon" href="{{ url_for('templates.new') }}" aria-label="Nueva plantilla" title="Nueva plantilla">+</a></div>
+    {% for folder, items in templates | groupby('folder') %}
+    {% if folder %}<div class="tree-folder mono">{{ folder }}/</div>{% endif %}
+    {% for t in items %}
+    <a class="list-item mono{{ ' nested' if folder }}" href="{{ url_for('templates.edit', template_id=t.id) }}"{% if template is defined and template.id == t.id %} aria-current="page"{% endif %}>
+      <span>{{ t.name }}</span>{% if t.mode == 'visual' %}<span class="pill pill-draft">Visual</span>{% endif %}
+    </a>
+    {% endfor %}
+    {% else %}
+    <p class="empty">Sin plantillas.</p>
+    {% endfor %}
+  </nav>
+  <div class="grow-col">{% block pane %}{% endblock %}</div>
+</div>
+{% endblock %}
