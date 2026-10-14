@@ -1,0 +1,110 @@
+{% macro err(name) %}{% if errors[name] %}<div class="error" id="fe-{{ name }}-error">{{ errors[name] }}</div>{% endif %}{% endmacro %}
+{% macro aria(name) %}{% if errors[name] %} aria-invalid="true" aria-describedby="fe-{{ name }}-error"{% endif %}{% endmacro %}
+{% set action = url_for('models.save_field', type_id=ct.id, key=editing) if editing else url_for('models.save_field', type_id=ct.id) %}
+<h3>{{ 'Editar campo' if editing else 'Nuevo campo' }}</h3>
+<form method="post" action="{{ action }}" hx-post="{{ action }}" hx-target="#modelo" novalidate class="stack">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="field{{ ' has-error' if errors.label }}">
+    <label for="fe-label">Etiqueta</label>
+    <input id="fe-label" name="label" value="{{ f.label }}" maxlength="120"{{ aria('label') }}>
+    {{ err('label') }}
+  </div>
+
+  <div class="field{{ ' has-error' if errors.key }}">
+    <label for="fe-key">Nombre interno</label>
+    {% if editing %}
+    <input id="fe-key" value="{{ editing }}" class="mono" readonly aria-describedby="fe-key-help">
+    <div class="help" id="fe-key-help">No se puede cambiar una vez creado.</div>
+    {% else %}
+    <input id="fe-key" name="key" value="{{ f.key }}" class="mono" maxlength="60" aria-describedby="fe-key-help{{ ' fe-key-error' if errors.key }}"{{ ' aria-invalid=true' if errors.key }}>
+    <div class="help" id="fe-key-help">Minúsculas, números y guiones bajos. Es la clave en las plantillas.</div>
+    {{ err('key') }}
+    {% endif %}
+  </div>
+
+  <div class="field{{ ' has-error' if errors.type }}">
+    <label for="fe-type">Tipo</label>
+    {% if type_locked %}
+    <input type="hidden" name="type" value="{{ f.type }}">
+    <input id="fe-type" value="{{ TYPES[f.type] }}" readonly aria-describedby="fe-type-help">
+    <div class="help" id="fe-type-help">Hay entradas con datos en este campo; el tipo ya no se puede cambiar.</div>
+    {% else %}
+    <select id="fe-type" name="type"{{ aria('type') }}
+            hx-get="{{ url_for('models.show', type_id=ct.id, campo=editing) if editing else url_for('models.show', type_id=ct.id) }}"
+            hx-include="closest form" hx-target="#modelo" hx-trigger="change">
+      {% for value, label in TYPES.items() %}
+      <option value="{{ value }}" {{ 'selected' if value == f.type }}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    {{ err('type') }}
+    {% endif %}
+  </div>
+
+  {% if f.type in ('text', 'number') %}
+  <div class="field-row">
+    <div class="field{{ ' has-error' if errors.minimum }}">
+      <label for="fe-min">{{ 'Largo mínimo' if f.type == 'text' else 'Mínimo' }}</label>
+      <input id="fe-min" name="minimum" type="number" step="any" value="{{ f.minimum }}"{{ aria('minimum') }}>
+      {{ err('minimum') }}
+    </div>
+    <div class="field{{ ' has-error' if errors.maximum }}">
+      <label for="fe-max">{{ 'Largo máximo' if f.type == 'text' else 'Máximo' }}</label>
+      <input id="fe-max" name="maximum" type="number" step="any" value="{{ f.maximum }}"{{ aria('maximum') }}>
+      {{ err('maximum') }}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if f.type == 'relation' %}
+  <div class="field{{ ' has-error' if errors.ref }}">
+    <label for="fe-ref">Modelo relacionado</label>
+    <select id="fe-ref" name="ref"{{ aria('ref') }}>
+      <option value="">Elige un modelo</option>
+      {% for t in types %}<option value="{{ t.id }}" {{ 'selected' if t.id|string == f.ref|string }}>{{ t.name }}</option>{% endfor %}
+    </select>
+    {{ err('ref') }}
+  </div>
+  {% endif %}
+
+  {% if f.type == 'slug' %}
+  <div class="field{{ ' has-error' if errors.slug_source }}">
+    <label for="fe-origen">Generar desde</label>
+    <select id="fe-origen" name="slug_source"{{ aria('slug_source') }}>
+      <option value="">Elige un campo de texto</option>
+      {% for k, p in ct.fields if p['x-type'] == 'text' %}<option value="{{ k }}" {{ 'selected' if k == f.slug_source }}>{{ p.title }}</option>{% endfor %}
+    </select>
+    {{ err('slug_source') }}
+  </div>
+  {% endif %}
+
+  {% if f.type in ('text', 'number', 'date') %}
+  <div class="field{{ ' has-error' if errors.default }}">
+    <label for="fe-default">Valor por defecto</label>
+    <input id="fe-default" name="default" value="{{ f.default }}"
+           type="{{ 'number' if f.type == 'number' else 'date' if f.type == 'date' else 'text' }}" step="any"{{ aria('default') }}>
+    {{ err('default') }}
+  </div>
+  {% elif f.type == 'bool' %}
+  <label class="check"><input type="checkbox" name="default" {{ 'checked' if f.default in (true, 'on') }}> Marcado por defecto</label>
+  {% endif %}
+
+  {% if f.type == 'image' %}
+  <p class="help">Las imágenes se eligen desde Medios (hito H3). Hasta entonces el campo no puede ser requerido.</p>
+  {% elif f.type != 'bool' %}
+  <label class="check"><input type="checkbox" name="required" {{ 'checked' if f.required in (true, 'on') }}> Campo requerido</label>
+  {% endif %}
+
+  <div class="field">
+    <label for="fe-help">Texto de ayuda para el editor</label>
+    <input id="fe-help" name="help" value="{{ f.help }}" maxlength="200">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Aplicar</button>
+    {% if editing %}
+    <a class="btn btn-danger" href="{{ url_for('models.delete_field', type_id=ct.id, key=editing) }}"
+       hx-get="{{ url_for('models.delete_field', type_id=ct.id, key=editing) }}" hx-target="#editor">Eliminar campo</a>
+    {% endif %}
+  </div>
+</form>

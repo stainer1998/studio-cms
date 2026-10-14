@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_form.html" import field %}
+{% block title %}Nuevo modelo{% endblock %}
+{% block content %}
+<section class="card card-narrow">
+  <form method="post" novalidate class="stack">
+    {{ form.hidden_tag() }}
+    {{ field(form.name, autofocus=true) }}
+    {{ field(form.key) }}
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Crear modelo</button>
+      <a class="btn" href="{{ url_for('models.index') }}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% set action = url_for('models.delete_field', type_id=ct.id, key=key) %}
+{% set label = ct.schema.properties[key].title %}
+<div class="confirm" role="alertdialog" aria-labelledby="del-title" aria-describedby="del-desc">
+  <h3 id="del-title">¿Eliminar el campo «{{ label }}»?</h3>
+  {% if count %}
+  <p id="del-desc" class="flash flash-warning">
+    {{ count }} {{ 'entrada tiene' if count == 1 else 'entradas tienen' }} datos en este campo.
+    Al eliminarlo se borran esos datos (las versiones anteriores los conservan).
+  </p>
+  {% else %}
+  <p id="del-desc">Ninguna entrada tiene datos en este campo.</p>
+  {% endif %}
+  <form method="post" action="{{ action }}" hx-post="{{ action }}" hx-target="#modelo" class="form-actions">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-danger" autofocus>Eliminar{% if count %} y borrar los datos{% endif %}</button>
+    <a class="btn" href="{{ url_for('models.show', type_id=ct.id, campo=key) }}"
+       hx-get="{{ url_for('models.show', type_id=ct.id, campo=key) }}" hx-target="#modelo">Cancelar</a>
+  </form>
+</div>

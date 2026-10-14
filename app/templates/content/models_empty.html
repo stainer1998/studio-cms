@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Modelos{% endblock %}
+{% block actions %}<a class="btn-primary" href="{{ url_for('models.new') }}">Nuevo modelo</a>{% endblock %}
+{% block content %}
+<section class="card"><p class="empty">Este sitio todavía no tiene modelos. <a href="{{ url_for('models.new') }}">Crea el primero</a>, por ejemplo «Producto».</p></section>
+{% endblock %}

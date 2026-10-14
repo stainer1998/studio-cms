@@ -1,0 +1,80 @@
+<nav class="card list-pane" aria-label="Modelos del sitio">
+  <div class="card-head"><h2>Modelos</h2></div>
+  {% for t in types %}
+  <a class="list-item" href="{{ url_for('models.show', type_id=t.id) }}"{% if t.id == ct.id %} aria-current="page"{% endif %}>
+    <span>{{ t.name }}</span><span class="muted small">{{ t.fields | length }} campos</span>
+  </a>
+  {% endfor %}
+</nav>
+<div class="grow-col">
+{% include "_flashes.html" %}
+<section class="card">
+  <div class="card-head">
+    <form method="post" action="{{ url_for('models.show', type_id=ct.id) }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="model-name" class="sr-only">Nombre visible</label>
+      <input id="model-name" name="name" value="{{ ct.name }}" class="title-input" maxlength="120" required>
+      <span class="mono muted">{{ ct.key }}</span>
+      <button type="submit" class="btn">Guardar cambios</button>
+    </form>
+    <a href="{{ url_for('entries.list_entries', type_id=ct.id) }}">{{ entry_count }} entradas</a>
+  </div>
+
+  <div class="model-grid">
+    <div>
+      <div class="section-head">
+        <h3>Campos</h3>
+        <a class="btn" href="{{ url_for('models.show', type_id=ct.id) }}#editor"
+           hx-get="{{ url_for('models.show', type_id=ct.id) }}" hx-target="#modelo">Agregar campo</a>
+      </div>
+      {% if ct.fields %}
+      <table>
+        <thead><tr><th scope="col">Campo</th><th scope="col">Tipo</th><th scope="col">Requerido</th><th scope="col"><span class="sr-only">Orden</span></th></tr></thead>
+        <tbody>
+        {% for key, p in ct.fields %}
+        <tr{% if key == editing %} class="selected"{% endif %}>
+          <td>
+            <a href="{{ url_for('models.show', type_id=ct.id, campo=key) }}"
+               hx-get="{{ url_for('models.show', type_id=ct.id, campo=key) }}" hx-target="#modelo">{{ p.title }}</a>
+            <div class="mono muted small">{{ key }}</div>
+          </td>
+          <td>{{ TYPES[p['x-type']] }}{% if p['x-type'] == 'relation' %} → {{ (types | selectattr('id', 'equalto', p['x-ref']) | map(attribute='name') | first) or '?' }}{% endif %}</td>
+          <td>{{ 'Sí' if key in ct.schema.required else 'No' }}</td>
+          <td class="row-actions">
+            {% set row = loop %}
+            {% for dir, label, sym in [('arriba', 'Subir', '↑'), ('abajo', 'Bajar', '↓')] %}
+            <form method="post" action="{{ url_for('models.move_field', type_id=ct.id, key=key) }}"
+                  hx-post="{{ url_for('models.move_field', type_id=ct.id, key=key) }}" hx-target="#modelo">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="dir" value="{{ dir }}">
+              <button type="submit" class="btn btn-icon" aria-label="{{ label }} «{{ p.title }}»"
+                      {{ 'disabled' if (dir == 'arriba' and row.first) or (dir == 'abajo' and row.last) }}>{{ sym }}</button>
+            </form>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="empty">Sin campos todavía. Agrega el primero en el panel «Nuevo campo».</p>
+      {% endif %}
+    </div>
+
+    <aside id="editor" class="editor-pane">
+      {% include "content/_field_editor.html" %}
+    </aside>
+  </div>
+</section>
+
+<div class="columns">
+  <section class="card grow">
+    <div class="card-head"><h2>Esquema JSON generado</h2><span class="mono muted small">content_types.schema</span></div>
+    <pre class="code" tabindex="0" aria-label="Esquema JSON del modelo">{{ schema_json }}</pre>
+  </section>
+  <section class="card side">
+    <div class="card-head"><h2>Rutas que lo usan</h2></div>
+    <p class="empty">Sin rutas configuradas. Las rutas se definen en el hito H5.</p>
+  </section>
+</div>
+</div>

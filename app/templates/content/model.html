@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Modelos{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('models.new') }}">Nuevo modelo</a>{% endblock %}
+{% block content %}
+<div id="modelo" class="split">{% include "content/_model_body.html" %}</div>
+{% endblock %}
