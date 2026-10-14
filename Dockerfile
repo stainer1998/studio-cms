@@ -1,3 +1,11 @@
+# Islas JS del Studio (Tiptap; luego Monaco y GrapesJS), compiladas con esbuild.
+FROM node:24-slim AS frontend
+WORKDIR /frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/src ./src
+RUN mkdir -p /app/static/dist && npm run build
+
 FROM python:3.12-slim
 
 RUN pip install --no-cache-dir "uv>=0.9,<1"
@@ -8,6 +16,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 
 COPY app ./app
+COPY --from=frontend /app/static/dist ./app/static/dist
 COPY migrations ./migrations
 
 RUN useradd --system --create-home --uid 1000 studio
