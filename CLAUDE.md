@@ -122,7 +122,11 @@ docker compose up -d --build                         # stack completo con Caddy 
 docker compose exec web flask --app app crear-admin  # administrador dentro del stack
 ```
 
-El comando para compilar el frontend (esbuild) se agrega en H2, cuando exista `frontend/`.
+Islas JS (Tiptap; luego Monaco y GrapesJS), compiladas con esbuild a `app/static/dist/` (no versionado; el `Dockerfile` las compila solo):
+
+```bash
+cd frontend && npm ci && npm run build             # o `npm run watch` mientras se desarrolla
+```
 
 ## Fuera de alcance en este repositorio por ahora
 

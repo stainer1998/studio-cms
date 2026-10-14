@@ -103,10 +103,10 @@ Criterios de aceptación:
 
 Criterios de aceptación:
 
-- [ ] Cada cambio en un modelo actualiza su esquema JSON, visible en la pantalla del modelo.
-- [ ] El slug se genera desde otro campo elegido y se valida como único dentro del modelo.
-- [ ] Una relación apunta a otro modelo del mismo sitio y se muestra como selector en el formulario de la entrada.
-- [ ] Eliminar un campo con datos muestra cuántas entradas lo usan y exige confirmación.
+- [x] Cada cambio en un modelo actualiza su esquema JSON, visible en la pantalla del modelo.
+- [x] El slug se genera desde otro campo elegido y se valida como único dentro del modelo.
+- [x] Una relación apunta a otro modelo del mismo sitio y se muestra como selector en el formulario de la entrada.
+- [x] Eliminar un campo con datos muestra cuántas entradas lo usan y exige confirmación.
 
 ### 3.4 Contenido
 
@@ -119,11 +119,11 @@ Criterios de aceptación:
 
 Criterios de aceptación:
 
-- [ ] El formulario de una entrada refleja de inmediato cualquier cambio del modelo.
-- [ ] Los errores de validación se muestran junto a cada campo y no se pierde lo escrito.
-- [ ] El HTML del editor enriquecido se sanitiza antes de guardarse.
-- [ ] Cada guardado crea una versión, y se puede comparar y restaurar una versión anterior.
-- [ ] Solo las entradas listas para exportar se incluyen en la vista previa pública y en el ZIP.
+- [x] El formulario de una entrada refleja de inmediato cualquier cambio del modelo.
+- [x] Los errores de validación se muestran junto a cada campo y no se pierde lo escrito.
+- [x] El HTML del editor enriquecido se sanitiza antes de guardarse.
+- [x] Cada guardado crea una versión, y se puede comparar y restaurar una versión anterior.
+- [ ] Solo las entradas listas para exportar se incluyen en la vista previa pública y en el ZIP. *(El estado borrador o listo ya existe; el filtro se aplica en H5 y H9.)*
 
 ### 3.5 Medios
 
