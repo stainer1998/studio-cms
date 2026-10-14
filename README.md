@@ -2,13 +2,14 @@
 
 CMS propio en Flask de VF Digital para construir sitios de clientes. Este repositorio contiene la **etapa 1: Studio de uso personal**, que permite crear un sitio completo y exportarlo como sitio estático en un archivo ZIP.
 
-**Estado:** hitos H1 a H4 terminados (base, contenido, medios y motor de plantillas); sigue la prueba de concepto de GrapesJS con Jinja2 y luego H5 (rutas y vista previa). Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
+**Estado:** hitos H1 a H4 terminados (base, contenido, medios y motor de plantillas); la prueba de concepto de GrapesJS con Jinja2 resultó viable ([informe](docs/poc-grapesjs.md)); sigue H5 (rutas y vista previa). Los comandos para trabajar están en [CLAUDE.md](CLAUDE.md#comandos).
 
 ## Documentación
 
 | Archivo | Contenido |
 | --- | --- |
 | [docs/etapa-1.md](docs/etapa-1.md) | Alcance, requerimientos con criterios de aceptación, modelo de datos y plan por hitos de la etapa 1. |
+| [docs/poc-grapesjs.md](docs/poc-grapesjs.md) | Prueba de concepto de GrapesJS con Jinja2: resultados y recomendaciones para H7. |
 | [docs/requerimientos.md](docs/requerimientos.md) | Requerimientos y especificación técnica del sistema completo (etapas 1 a 4). |
 | [docs/prototipo/](docs/prototipo/README.md) | Pantallas de referencia de la interfaz. |
 | [CLAUDE.md](CLAUDE.md) | Instrucciones de trabajo para Claude Code. |
