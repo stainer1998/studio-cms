@@ -19,6 +19,7 @@ Si encuentras una contradicción entre estos archivos, o un requerimiento que no
 - Un hito está terminado cuando su entregable verificable funciona y se cumplen los criterios de aceptación de sus requerimientos (RF), con pruebas que los cubren.
 - Al cerrar un hito, marca sus criterios en `docs/etapa-1.md` (`- [x]`) y resume lo hecho y lo pendiente.
 - Antes de H7 (editor visual) se hace una prueba de concepto de GrapesJS con Jinja2: un bloque de lista que genere un `for` válido y se vea igual en el editor y en la vista previa.
+- Nunca se hace commit directo en `main`. Cada hito o cambio va en su rama (`hito/h3-medios`, `fix/…`, `docs/…`) y entra por pull request con las pruebas y `ruff check` pasando; ver la sección Ramas del `README.md`.
 - Commits pequeños, en español, con el hito y el RF cuando aplique: `H2: formulario generado desde el modelo (RF-10)`.
 
 ## Stack (decidido, no cambiar sin consultar)
