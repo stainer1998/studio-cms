@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Versiones{% endblock %}
+{% block heading %}<span class="muted">Versiones ·</span> {{ entry.title }}{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('entries.edit', entry_id=entry.id) }}">Volver a la entrada</a>{% endblock %}
+{% block content %}
+<div class="columns">
+  <section class="card grow">
+    <div class="card-head"><h2>Historial</h2><span class="muted small">Cada guardado crea una versión</span></div>
+    <form method="get" action="{{ url_for('entries.versions', entry_id=entry.id) }}"
+          hx-get="{{ url_for('entries.versions', entry_id=entry.id) }}" hx-target="#diff">
+      <table>
+        <thead><tr><th scope="col">Versión</th><th scope="col">Estado</th><th scope="col">Comparar A</th><th scope="col">Comparar B</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+        <tbody>
+        {% for v in items %}
+        <tr>
+          <td>{{ v.created_at | fecha_hora }}{% if loop.first %} <span class="pill pill-ok">Actual</span>{% endif %}</td>
+          <td>{{ STATUSES[v.status] }}</td>
+          <td><input type="radio" name="a" value="{{ v.id }}" aria-label="Versión del {{ v.created_at | fecha_hora }} como A" {{ 'checked' if a and v.id == a.id }}></td>
+          <td><input type="radio" name="b" value="{{ v.id }}" aria-label="Versión del {{ v.created_at | fecha_hora }} como B" {{ 'checked' if b and v.id == b.id }}></td>
+          <td class="row-actions">
+            {% if not loop.first %}
+            <button type="submit" class="btn" form="restaurar-{{ v.id }}">Restaurar</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% if items | length > 1 %}<div class="pad"><button type="submit" class="btn">Comparar</button></div>{% endif %}
+    </form>
+    {% for v in items[1:] %}
+    <form id="restaurar-{{ v.id }}" method="post" action="{{ url_for('entries.restore', entry_id=entry.id, version_id=v.id) }}"
+          hx-confirm="¿Restaurar la versión del {{ v.created_at | fecha_hora }}? El contenido actual queda guardado en el historial." hx-post="{{ url_for('entries.restore', entry_id=entry.id, version_id=v.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+    {% endfor %}
+  </section>
+  <section class="card side" id="diff" aria-live="polite">{% include "content/_diff.html" %}</section>
+</div>
+{% endblock %}

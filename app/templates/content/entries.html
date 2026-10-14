@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Contenido{% endblock %}
+{% block actions %}<a class="btn-primary" href="{{ url_for('entries.new', type_id=ct.id) }}">Nueva entrada</a>{% endblock %}
+{% block content %}
+<nav class="tabs" aria-label="Modelos">
+  {% for t in types %}
+  <a href="{{ url_for('entries.list_entries', type_id=t.id) }}"{% if t.id == ct.id %} aria-current="page"{% endif %}>{{ t.name }} · {{ counts.get(t.id, 0) }}</a>
+  {% endfor %}
+</nav>
+<section class="card">
+  <form class="filters" method="get" action="{{ url_for('entries.list_entries', type_id=ct.id) }}"
+        hx-get="{{ url_for('entries.list_entries', type_id=ct.id) }}" hx-target="#entradas"
+        hx-trigger="input changed delay:300ms from:#c-buscar, change from:#c-estado, submit" hx-push-url="true">
+    <div class="field">
+      <label for="c-buscar">Buscar entradas</label>
+      <input id="c-buscar" name="q" type="search" value="{{ q }}" placeholder="Buscar entradas">
+    </div>
+    <div class="field">
+      <label for="c-estado">Estado</label>
+      <select id="c-estado" name="estado">
+        <option value="">Todos</option>
+        {% for value, label in STATUSES.items() %}<option value="{{ value }}" {{ 'selected' if value == status }}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn">Filtrar</button>
+  </form>
+  <div id="entradas" aria-live="polite">{% include "content/_entries_table.html" %}</div>
+</section>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ entry.title if entry.id else 'Nueva entrada' }}{% endblock %}
+{% block head %}<script src="{{ url_for('static', filename='dist/tiptap.js') }}" defer></script>{% endblock %}
+{% block heading %}<span class="muted">{{ ct.name }} ·</span> {{ entry.title if entry.id else 'Nueva entrada' }}{% endblock %}
+{% block content %}
+{% set action = url_for('entries.edit', entry_id=entry.id) if entry.id else url_for('entries.new', type_id=ct.id) %}
+<form method="post" action="{{ action }}" novalidate class="split">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <section class="card grow-col entry-fields">
+    {% if errors %}<div class="flash flash-error" role="alert">Revisa los campos marcados. No se guardó nada.</div>{% endif %}
+    {% for key, p in ct.fields %}
+    {% set t = p['x-type'] %}
+    {% set id = 'f-' ~ key %}
+    {% set value = data.get(key) %}
+    {% set req = key in ct.schema.required %}
+    {% set describedby = [id ~ '-ayuda' if p.description or t == 'slug', id ~ '-error' if errors[key]] | select | join(' ') %}
+    {% set attrs %}{% if describedby %} aria-describedby="{{ describedby }}"{% endif %}{% if errors[key] %} aria-invalid="true"{% endif %}{% if req %} aria-required="true"{% endif %}{% endset %}
+    <div class="field{{ ' has-error' if errors[key] }}">
+      {% if t == 'bool' %}
+      <label class="check"><input type="checkbox" id="{{ id }}" name="{{ key }}" {{ 'checked' if value }}{{ attrs }}> {{ p.title }}</label>
+      {% else %}
+      <label for="{{ id }}">{{ p.title }}{% if req %} <span aria-hidden="true" class="req">*</span>{% endif %} <span class="type-tag">{{ TYPES[t] }}</span></label>
+      {% endif %}
+
+      {% if t == 'text' %}
+      <input id="{{ id }}" name="{{ key }}" value="{{ value or '' }}"{% if p.maxLength %} maxlength="{{ p.maxLength }}"{% endif %}{{ attrs }}>
+      {% elif t == 'slug' %}
+      <input id="{{ id }}" name="{{ key }}" value="{{ value or '' }}" class="mono"{{ attrs }}>
+      {% elif t == 'number' %}
+      <input id="{{ id }}" name="{{ key }}" type="number" step="any" value="{{ value if value is not none else '' }}"{% if p.minimum is defined %} min="{{ p.minimum }}"{% endif %}{% if p.maximum is defined %} max="{{ p.maximum }}"{% endif %}{{ attrs }}>
+      {% elif t == 'date' %}
+      <input id="{{ id }}" name="{{ key }}" type="date" value="{{ value or '' }}"{{ attrs }}>
+      {% elif t == 'rich' %}
+      <textarea id="{{ id }}" name="{{ key }}" rows="8" data-rich{{ attrs }}>{{ value or '' }}</textarea>
+      {% elif t == 'relation' %}
+      <select id="{{ id }}" name="{{ key }}"{{ attrs }}>
+        <option value="">Sin seleccionar</option>
+        {% for opt_id, opt_title in relations[key] %}<option value="{{ opt_id }}" {{ 'selected' if opt_id == value }}>{{ opt_title }}</option>{% endfor %}
+      </select>
+      {% elif t == 'image' %}
+      <div class="image-slot" id="{{ id }}">{{ ('Medio #' ~ value) if value else 'Sin imagen' }} · Se elige desde Medios (hito H3).</div>
+      {% endif %}
+
+      {% if t == 'slug' %}
+      <div class="help" id="{{ id }}-ayuda">{{ p.description or '' }} Si lo dejas vacío, se genera desde «{{ ct.schema.properties[ct.slug_source].title if ct.slug_source else '—' }}».</div>
+      {% elif p.description %}
+      <div class="help" id="{{ id }}-ayuda">{{ p.description }}</div>
+      {% endif %}
+      {% if errors[key] %}<div class="error" id="{{ id }}-error">{{ errors[key] }}</div>{% endif %}
+    </div>
+    {% else %}
+    <p class="empty">El modelo no tiene campos. <a href="{{ url_for('models.show', type_id=ct.id) }}">Agrega campos</a>.</p>
+    {% endfor %}
+  </section>
+
+  <aside class="side-col">
+    <section class="card pad stack">
+      <div class="field{{ ' has-error' if errors.status }}">
+        <label for="f-status">Estado</label>
+        <select id="f-status" name="status">
+          {% for value, label in STATUSES.items() %}<option value="{{ value }}" {{ 'selected' if value == (request.form.status or entry.status) }}>{{ label }}</option>{% endfor %}
+        </select>
+        <div class="help">Solo las entradas listas se incluyen en la vista previa y en la exportación.</div>
+        {% if errors.status %}<div class="error">{{ errors.status }}</div>{% endif %}
+      </div>
+      <button type="submit" class="btn-primary btn-block">Guardar</button>
+      {% if entry.id %}<a class="btn btn-block" href="{{ url_for('entries.versions', entry_id=entry.id) }}">Historial de versiones</a>{% endif %}
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Se muestra en</h2></div>
+      <p class="empty">Sin rutas configuradas. Las URL aparecen aquí cuando se definan las rutas (hito H5).</p>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Estructura del modelo</h2><a href="{{ url_for('models.show', type_id=ct.id) }}">Editar</a></div>
+      <p class="empty">{{ ct.name }} · {{ ct.fields | length }} campos</p>
+    </section>
+  </aside>
+</form>
+{% endblock %}

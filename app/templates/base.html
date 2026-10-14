@@ -6,6 +6,7 @@
   <meta name="htmx-config" content='{"includeIndicatorStyles": false}'>
   <title>{% block title %}{% endblock %} · Studio</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='studio.css') }}">
+  {% block head %}{% endblock %}
   <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}" defer></script>
 </head>
 <body>
@@ -35,6 +36,8 @@
 
     {% set nav = [
       ('', [('Panel', 'core.dashboard')]),
+      ('Contenido', [('Contenido', 'entries.index')]),
+      ('Construcción', [('Modelos', 'models.index')]),
       ('Administración', [('Sitios', 'sites.index'), ('Auditoría', 'core.audit')]),
     ] %}
     <div class="nav">

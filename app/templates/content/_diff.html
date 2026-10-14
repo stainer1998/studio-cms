@@ -1,0 +1,15 @@
+<div class="card-head"><h2>Diferencias</h2></div>
+{% if a and b %}
+<p class="pad small muted">De {{ a.created_at | fecha_hora }} (A) a {{ b.created_at | fecha_hora }} (B)</p>
+{% for label, before, after in rows %}
+<div class="diff-row">
+  <div class="strong">{{ label }}</div>
+  <div class="diff-old"><span class="sr-only">Antes: </span>{{ before | entry_value }}</div>
+  <div class="diff-new"><span class="sr-only">Después: </span>{{ after | entry_value }}</div>
+</div>
+{% else %}
+<p class="empty">Las dos versiones son iguales.</p>
+{% endfor %}
+{% else %}
+<p class="empty">Se necesita más de una versión para comparar.</p>
+{% endif %}

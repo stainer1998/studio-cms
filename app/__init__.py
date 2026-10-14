@@ -28,6 +28,7 @@ def create_app(config=Config):
 
     # Registra los modelos y los eventos de sesión (filtro por sitio y auditoría).
     from app.auth.models import User
+    from app.content import models as content_models  # noqa: F401
     from app.core import audit, site_filter  # noqa: F401
     from app.sites.models import Site  # noqa: F401
 
@@ -38,10 +39,12 @@ def create_app(config=Config):
 
     from app.auth.cli import bp as auth_cli_bp
     from app.auth.routes import bp as auth_bp
+    from app.content.routes_entries import bp as entries_bp
+    from app.content.routes_types import bp as models_bp
     from app.core.routes import bp as core_bp
     from app.sites.routes import bp as sites_bp
 
-    for bp in (auth_bp, auth_cli_bp, core_bp, sites_bp):
+    for bp in (auth_bp, auth_cli_bp, core_bp, sites_bp, models_bp, entries_bp):
         app.register_blueprint(bp)
 
     from app.core.active_site import load_active_site

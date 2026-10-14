@@ -1,0 +1,19 @@
+{% if entries %}
+<table>
+  <thead><tr><th scope="col">Entrada</th>{% if ct.slug_field %}<th scope="col">Slug</th>{% endif %}<th scope="col">Estado</th><th scope="col">Actualizada</th></tr></thead>
+  <tbody>
+  {% for e in entries %}
+  <tr>
+    <td class="strong"><a href="{{ url_for('entries.edit', entry_id=e.id) }}">{{ e.title }}</a></td>
+    {% if ct.slug_field %}<td class="mono">{{ e.slug or '—' }}</td>{% endif %}
+    <td><span class="pill {{ 'pill-ok' if e.status == 'listo' else 'pill-draft' }}">{{ STATUSES[e.status] }}</span></td>
+    <td class="muted">{{ e.updated_at | fecha_hora }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% elif q or status %}
+<p class="empty">No hay entradas que coincidan con la búsqueda.</p>
+{% else %}
+<p class="empty">Este modelo no tiene entradas. <a href="{{ url_for('entries.new', type_id=ct.id) }}">Crea la primera</a>.</p>
+{% endif %}
