@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from pathlib import Path
 
 
 def _flag(name, default):
@@ -24,6 +25,13 @@ class Config:
     LOGIN_LIMIT = "5 per 15 minutes"
     AUDIT_PAGE_SIZE = 50
 
+    # Medios (H3). En Docker, MEDIA_ROOT es un volumen compartido entre web y worker.
+    MEDIA_ROOT = os.environ.get("MEDIA_ROOT") or str(Path(__file__).parents[1] / "storage/media")
+    MEDIA_MAX_BYTES = int(os.environ.get("MEDIA_MAX_MB", "10")) * 1024 * 1024
+    # Tope de la petición completa (se pueden subir varios archivos a la vez).
+    MAX_CONTENT_LENGTH = 10 * MEDIA_MAX_BYTES
+    RQ_ASYNC = True
+
 
 class TestConfig(Config):
     TESTING = True
@@ -33,3 +41,4 @@ class TestConfig(Config):
     )
     RATELIMIT_STORAGE_URI = "memory://"
     SESSION_COOKIE_SECURE = False
+    RQ_ASYNC = False  # los trabajos corren en línea para poder comprobar su resultado

@@ -19,7 +19,9 @@ COPY app ./app
 COPY --from=frontend /app/static/dist ./app/static/dist
 COPY migrations ./migrations
 
-RUN useradd --system --create-home --uid 1000 studio
+# El volumen de medios hereda el dueño de esta carpeta la primera vez que se monta.
+RUN useradd --system --create-home --uid 1000 studio \
+    && mkdir -p /srv/storage/media && chown -R studio /srv/storage
 USER studio
 
 EXPOSE 8000
