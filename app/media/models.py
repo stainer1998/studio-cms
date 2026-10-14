@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import JSON, ForeignKey, String
+from sqlalchemy import JSON, CheckConstraint, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.models import Auditable, SiteScoped, utcnow
@@ -49,9 +49,16 @@ class MediaUsage(SiteScoped, db.Model):
     """Dónde se usa cada medio. Sin cascada: un medio en uso no se puede eliminar (RF-15)."""
 
     __tablename__ = "media_usages"
+    __table_args__ = (CheckConstraint("num_nonnulls(entry_id, template_id) = 1", name="one_owner"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
     media_id: Mapped[int] = mapped_column(ForeignKey("media.id"), index=True)
-    entry_id: Mapped[int] = mapped_column(ForeignKey("entries.id", ondelete="CASCADE"), index=True)
+    entry_id: Mapped[int | None] = mapped_column(
+        ForeignKey("entries.id", ondelete="CASCADE"), index=True
+    )
+    template_id: Mapped[int | None] = mapped_column(
+        ForeignKey("templates.id", ondelete="CASCADE"), index=True
+    )
 
     entry = relationship("Entry", lazy="joined")
+    template = relationship("Template", lazy="joined")
